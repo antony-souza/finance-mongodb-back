@@ -1,0 +1,1 @@
+[![My Skills](https://skillicons.dev/icons?i=nest,nodejs,ts,mongodb,redis,nginx,docker)](https://skillicons.dev)
