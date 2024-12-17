@@ -9,7 +9,7 @@ export class UserRepository {
     @InjectModel('User') private readonly userModel: Model<UserEntity>,
   ) {}
 
-  async createUser() {
-    return this.userModel.create({});
+  async createUser(userData: Partial<UserEntity>): Promise<UserEntity> {
+    return this.userModel.create(userData);
   }
 }

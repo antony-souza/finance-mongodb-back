@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import mongoose from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema()
 export class UserEntity {
   @Prop({ type: String, required: false })
   id?: string;
@@ -16,8 +15,17 @@ export class UserEntity {
   @Prop({ type: String, required: true })
   password: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Store' })
-  store: StoreEntity;
+  @Prop({ type: String, required: false })
+  image_url?: string;
+
+  @Prop({ type: Date, required: false, default: Date.now })
+  createdAt?: Date;
+
+  @Prop({ type: Date, required: false, default: Date.now })
+  updatedAt?: Date;
+
+  @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: false })
+  store: mongoose.Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

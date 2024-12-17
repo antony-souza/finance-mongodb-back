@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 class Environment {
+  public readonly uploadServiceType: string =
+    process.env.UPLOAD_SERVICE_TYPE ?? '';
   public readonly mongoUrl: string = process.env.mongoURI ?? '';
   public readonly port: number = parseInt(process.env.PORT ?? '');
   public readonly host: string = process.env.HOST ?? '';

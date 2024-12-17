@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRepository } from 'src/repositories/user.repository';
+import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
+import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
+import { TransformIdService } from 'src/utils/transformId.service';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly transformIdService: TransformIdService,
+    private readonly generatePasswordService: GeneratePasswordService,
+    private readonly uploadFileFactoryService: UploadFileFactoryService,
+  ) {}
 
-  findAll() {
-    return `This action returns all users`;
-  }
+  async create(createUserDto: CreateUserDto) {
+    const password = await this.generatePasswordService.createHash(
+      createUserDto.password,
+    );
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+    let url = '';
+    if (createUserDto.image_url) {
+      url = await this.uploadFileFactoryService.upload(createUserDto.image_url);
+    }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const id = this.transformIdService.transform(createUserDto.store_id);
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userRepository.createUser({
+      ...createUserDto,
+      password: password,
+      store: id,
+      image_url: url,
+    });
   }
 }

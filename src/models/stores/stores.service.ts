@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
-import { UpdateStoreDto } from './dto/update-store.dto';
+import { StoreRespository } from 'src/repositories/store.repository';
+import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 
 @Injectable()
 export class StoresService {
-  create(createStoreDto: CreateStoreDto) {
-    return 'This action adds a new store';
-  }
+  constructor(
+    private readonly storeRepository: StoreRespository,
+    private readonly uploadFileFactoryService: UploadFileFactoryService,
+  ) {}
 
-  findAll() {
-    return `This action returns all stores`;
-  }
+  async create(createStoreDto: CreateStoreDto) {
+    let url = '';
+    if (createStoreDto.image_url) {
+      url = await this.uploadFileFactoryService.upload(
+        createStoreDto.image_url,
+      );
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} store`;
-  }
-
-  update(id: number, updateStoreDto: UpdateStoreDto) {
-    return `This action updates a #${id} store`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} store`;
+    return this.storeRepository.createStore({
+      ...createStoreDto,
+      image_url: url,
+    });
   }
 }
