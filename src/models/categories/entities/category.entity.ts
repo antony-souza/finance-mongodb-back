@@ -1,9 +1,9 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 @Schema()
-export class CategoryEntity {
+export class CategoriesEntity {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -13,3 +13,5 @@ export class CategoryEntity {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: true })
   store: StoreEntity;
 }
+
+export const CategoriesSchema = SchemaFactory.createForClass(CategoriesEntity);

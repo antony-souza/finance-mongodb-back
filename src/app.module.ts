@@ -6,6 +6,7 @@ import { environment } from './environment/environment';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './models/users/users.module';
 import { StoresModule } from './models/stores/stores.module';
+import { CategoriesModule } from './models/categories/categories.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { StoresModule } from './models/stores/stores.module';
     MongooseModule.forRoot(`${environment.databaseUrl}`),
     UsersModule,
     StoresModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,34 +1,56 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
-@Controller('categories')
+@Controller('/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  @Get('/all/store/:id')
+  findAllCategoriesByStore(@Param('id') id: string) {
+    return this.categoriesService.findAllCategoriesByStore(id);
   }
 
-  @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  @Post('/create')
+  @UseInterceptors(FileInterceptor('image_url'))
+  createCategory(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.categoriesService.createCategory({
+      ...createCategoryDto,
+      image_url: image_url,
+    });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  @Put('/update/:id')
+  @UseInterceptors(FileInterceptor('image_url'))
+  updateCategoryById(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.categoriesService.updateCategoryById({
+      ...updateCategoryDto,
+      id: id,
+      image_url: image_url,
+    });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  @Delete('/delete/:id')
+  deleteCategoryById(@Param('id') id: string) {
+    return this.categoriesService.deleteCategoryById(id);
   }
 }
