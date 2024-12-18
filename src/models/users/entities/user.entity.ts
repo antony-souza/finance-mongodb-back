@@ -26,7 +26,7 @@ export class UserEntity {
   updatedAt?: Date;
 
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: false })
-  store?: StoreEntity;
+  store_id: StoreEntity;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

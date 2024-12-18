@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 
 @Schema()
 export class StoreEntity {
-  @Prop({ type: mongoose.Types.ObjectId, required: false })
-  id?: mongoose.Types.ObjectId;
+  /* @Prop({ type: String, required: false })
+  _id?: string; */
 
   @Prop({ type: String, required: true })
   name: string;
