@@ -15,8 +15,8 @@ export class UserEntity {
   @Prop({ type: String, required: true })
   password: string;
 
-  @Prop({ type: String, required: false })
-  image_url?: string;
+  @Prop({ type: String, required: true })
+  image_url: string;
 
   @Prop({ type: Date, required: false, default: Date.now })
   createdAt?: Date;
@@ -25,7 +25,7 @@ export class UserEntity {
   updatedAt?: Date;
 
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: false })
-  store: mongoose.Types.ObjectId;
+  store_id?: string | mongoose.Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

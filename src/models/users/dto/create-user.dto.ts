@@ -15,8 +15,8 @@ export class CreateUserDto {
   password: string;
 
   @IsOptional()
-  store_id?: string;
+  image_url?: Express.Multer.File;
 
   @IsOptional()
-  image_url?: Express.Multer.File;
+  store_id?: string;
 }

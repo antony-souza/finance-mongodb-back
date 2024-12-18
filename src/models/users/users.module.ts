@@ -7,9 +7,13 @@ import { UserRepository } from 'src/repositories/user.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
 import { TransformIdService } from 'src/utils/transformId.service';
+import { StoreSchema } from '../stores/entities/store.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
+  ],
   controllers: [UsersController],
   providers: [
     UsersService,

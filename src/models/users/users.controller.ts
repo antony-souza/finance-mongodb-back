@@ -4,6 +4,7 @@ import {
   Body,
   UseInterceptors,
   UploadedFile,
+  Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,5 +23,10 @@ export class UsersController {
       ...createUserDto,
       image_url: image_url,
     });
+  }
+
+  @Get('/all')
+  findAll() {
+    return this.usersService.findAll();
   }
 }

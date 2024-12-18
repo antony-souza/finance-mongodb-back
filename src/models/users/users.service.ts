@@ -24,13 +24,14 @@ export class UsersService {
       url = await this.uploadFileFactoryService.upload(createUserDto.image_url);
     }
 
-    const id = this.transformIdService.transform(createUserDto.store_id);
-
     return this.userRepository.createUser({
       ...createUserDto,
       password: password,
-      store: id,
       image_url: url,
     });
+  }
+
+  async findAll() {
+    return this.userRepository.getAllUsers();
   }
 }
