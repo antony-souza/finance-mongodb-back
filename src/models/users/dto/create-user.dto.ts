@@ -19,5 +19,5 @@ export class CreateUserDto {
   image_url?: Express.Multer.File;
 
   @IsOptional()
-  store_id: StoreEntity;
+  store: StoreEntity;
 }

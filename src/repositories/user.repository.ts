@@ -14,9 +14,9 @@ export class UserRepository {
   async createUser(userData: UserEntity): Promise<UserEntity> {
     const createUser = await this.userModel.create(userData);
 
-    if (createUser.store_id) {
+    if (createUser.store) {
       await this.storeModel.findByIdAndUpdate(
-        createUser.store_id,
+        createUser.store,
         {
           $addToSet: { users: createUser._id },
         },
@@ -30,13 +30,15 @@ export class UserRepository {
   async getAllUsers() {
     return await this.userModel
       .find()
-      .select('_id name email image_url')
-      .populate('store_id', 'name')
-      .exec();
+      .select('_id name email image_url store')
+      .populate('store', 'name');
   }
 
   async getUserById(userId: string): Promise<UserEntity> {
-    return await this.userModel.findById(userId);
+    return await this.userModel
+      .findById(userId)
+      .select('_id name email image_url')
+      .populate('store', 'name');
   }
 
   async updateUserById(
@@ -44,5 +46,16 @@ export class UserRepository {
     data: Partial<UserEntity>,
   ): Promise<UserEntity> {
     return await this.userModel.findByIdAndUpdate(userId, data, { new: true });
+  }
+
+  async deleteUserById(userId: string): Promise<UserEntity> {
+    const deleteUser = await this.userModel.findByIdAndDelete(userId);
+
+    if (deleteUser.store) {
+      await this.storeModel.findByIdAndUpdate(deleteUser.store, {
+        $pull: { users: deleteUser._id },
+      });
+    }
+    return;
   }
 }
