@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 @Schema()
 export class UserEntity {
@@ -25,7 +26,7 @@ export class UserEntity {
   updatedAt?: Date;
 
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: false })
-  store_id?: string | mongoose.Types.ObjectId;
+  store?: StoreEntity;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

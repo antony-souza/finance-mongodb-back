@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 export class CreateUserDto {
   @IsString()
@@ -18,5 +19,5 @@ export class CreateUserDto {
   image_url?: Express.Multer.File;
 
   @IsOptional()
-  store_id?: string;
+  store: StoreEntity;
 }

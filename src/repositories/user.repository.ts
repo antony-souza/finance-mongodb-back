@@ -14,9 +14,9 @@ export class UserRepository {
   async createUser(userData: UserEntity): Promise<UserEntity> {
     const createUser = await this.userModel.create(userData);
 
-    if (createUser.store_id) {
+    if (createUser.store) {
       await this.storeModel.findByIdAndUpdate(
-        createUser.store_id,
+        createUser.store,
         {
           $addToSet: { users: createUser._id },
         },
@@ -27,8 +27,23 @@ export class UserRepository {
     return createUser;
   }
 
-  async getAllUsers(): Promise<UserEntity[]> {
-    return await this.userModel.find().select('_id name email image_url store');
+  async getAllUsers() {
+    const response = await this.userModel
+      .find()
+      .select('_id name email image_url')
+      .populate('store', 'name');
+
+    const result = response.map((user) => {
+      return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        image_url: user.image_url,
+        storeId: user.store?.id,
+        storeName: user.store?.name,
+      };
+    });
+    return result;
   }
 
   async getUserById(userId: string): Promise<UserEntity> {
