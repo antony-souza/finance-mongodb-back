@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
 
 @Injectable()
@@ -11,6 +10,10 @@ export class SalesService {
     const existingProduct = await this.salesRepository.findProductById(
       createSaleDto.product_id,
     );
+
+    if (existingProduct.stock < createSaleDto.quantitySold) {
+      throw new ConflictException('Product out of stock');
+    }
 
     const totalBilled = createSaleDto.quantitySold * existingProduct.price;
 
@@ -25,21 +28,5 @@ export class SalesService {
     });
 
     return createSales;
-  }
-
-  findAll() {
-    return `This action returns all sales`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} sale`;
-  }
-
-  update(id: number, updateSaleDto: UpdateSaleDto) {
-    return `This action updates a #${id} sale`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sale`;
   }
 }
