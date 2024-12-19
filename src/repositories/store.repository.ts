@@ -12,4 +12,12 @@ export class StoreRespository {
   async createStore(storeData: Partial<StoreEntity>): Promise<StoreEntity> {
     return this.storeModel.create(storeData);
   }
+
+  findAll(): Promise<StoreEntity[]> {
+    return this.storeModel
+      .find()
+      .select('name image_url categories products')
+      .populate('categories', 'name')
+      .populate('products', 'name');
+  }
 }

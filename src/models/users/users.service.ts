@@ -33,7 +33,11 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.userRepository.getAllUsers();
+    return await this.userRepository.getAllUsers();
+  }
+
+  async findOne(id: string) {
+    return await this.userRepository.getUserById(id);
   }
 
   async updateUserById(updateUserDto: UpdateUserDto) {

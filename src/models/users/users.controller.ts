@@ -22,6 +22,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('/:id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
   @Post('/create')
   @UseInterceptors(FileInterceptor('image_url'))
   create(

@@ -1,11 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { SalesRepository } from 'src/repositories/sales.repository';
 
 @Injectable()
 export class SalesService {
-  create(createSaleDto: CreateSaleDto) {
-    return 'This action adds a new sale';
+  constructor(private readonly salesRepository: SalesRepository) {}
+
+  async create(createSaleDto: CreateSaleDto) {
+    const existingProduct = await this.salesRepository.findProductById(
+      createSaleDto.product_id,
+    );
+
+    const totalBilled = createSaleDto.quantitySold * existingProduct.price;
+
+    await this.salesRepository.updateStock(
+      existingProduct.id,
+      createSaleDto.quantitySold,
+    );
+
+    const createSales = await this.salesRepository.create({
+      ...createSaleDto,
+      totalBilled: totalBilled,
+    });
+
+    return createSales;
   }
 
   findAll() {

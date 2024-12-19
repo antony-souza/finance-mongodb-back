@@ -10,6 +10,10 @@ export class StoresService {
     private readonly uploadFileFactoryService: UploadFileFactoryService,
   ) {}
 
+  findAll() {
+    return this.storeRepository.findAll();
+  }
+
   async create(createStoreDto: CreateStoreDto) {
     let url = '';
     if (createStoreDto.image_url) {

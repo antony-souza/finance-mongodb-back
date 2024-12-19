@@ -20,6 +20,9 @@ export class StoreEntity {
 
   @Prop({ type: [mongoose.Types.ObjectId], ref: 'Product', required: false })
   products: mongoose.Types.ObjectId[];
+
+  @Prop({ type: [mongoose.Types.ObjectId], required: false })
+  sales: mongoose.Types.ObjectId[];
 }
 
 export const StoreSchema = SchemaFactory.createForClass(StoreEntity);
