@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-
+import { v4 as uuidv4 } from 'uuid';
 @Schema()
 export class StoreEntity {
-  @Prop({ type: String, required: false })
-  id?: string;
+  @Prop({ type: String, required: false, default: uuidv4 })
+  _id: string;
 
   @Prop({ type: String, required: true })
   name: string;
@@ -12,17 +12,17 @@ export class StoreEntity {
   @Prop({ type: String, required: false })
   image_url?: string;
 
-  @Prop({ type: [mongoose.Types.ObjectId], ref: 'User', required: false })
-  users: mongoose.Types.ObjectId[];
+  @Prop({ type: [mongoose.Types.UUID], ref: 'User', required: false })
+  users: mongoose.Types.UUID[];
 
-  @Prop({ type: [mongoose.Types.ObjectId], ref: 'Categories', required: false })
-  categories: mongoose.Types.ObjectId[];
+  @Prop({ type: [mongoose.Types.UUID], ref: 'Categories', required: false })
+  categories: mongoose.Types.UUID[];
 
-  @Prop({ type: [mongoose.Types.ObjectId], ref: 'Product', required: false })
-  products: mongoose.Types.ObjectId[];
+  @Prop({ type: [mongoose.Types.UUID], ref: 'Product', required: false })
+  products: mongoose.Types.UUID[];
 
-  @Prop({ type: [mongoose.Types.ObjectId], required: false })
-  sales: mongoose.Types.ObjectId[];
+  @Prop({ type: [mongoose.Types.UUID], required: false })
+  sales: mongoose.Types.UUID[];
 }
 
 export const StoreSchema = SchemaFactory.createForClass(StoreEntity);

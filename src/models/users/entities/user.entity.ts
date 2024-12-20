@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
-
+import { v4 as uuidv4 } from 'uuid';
 @Schema()
 export class UserEntity {
-  @Prop({ type: String, required: false })
-  id?: string;
+  @Prop({ type: String, required: false, default: uuidv4 })
+  _id?: string;
 
   @Prop({ type: String, required: true })
   name: string;
@@ -25,7 +25,7 @@ export class UserEntity {
   @Prop({ type: Date, required: false, default: Date.now })
   updatedAt?: Date;
 
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: false })
+  @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: false })
   store: StoreEntity;
 }
 

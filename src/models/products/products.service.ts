@@ -12,7 +12,7 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     this.productRepository.findProductByName(
       createProductDto.name,
-      createProductDto.store.id,
+      createProductDto.store._id,
     );
 
     let url = '';

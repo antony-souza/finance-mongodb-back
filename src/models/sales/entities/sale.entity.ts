@@ -3,16 +3,29 @@ import mongoose, { Document } from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
-@Schema({ timestamps: true, collection: 'sales' })
+@Schema({ collection: 'sales' })
 export class SalesEntity extends Document {
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'Product', required: true })
+  @Prop({ type: String, default: uuidv4, required: false })
+  _id: string;
+
+  @Prop({ type: String, required: true })
+  productName: string;
+
+  @Prop({ type: mongoose.Types.UUID, ref: 'Product', required: true })
   product_id: ProductEntity;
 
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: String, required: true })
+  userName: string;
+
+  @Prop({ type: mongoose.Types.UUID, ref: 'User', required: true })
   user_id: UserEntity;
 
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'Store', required: true })
+  @Prop({ type: String, required: true })
+  storeName: string;
+
+  @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: true })
   store_id: StoreEntity;
 
   @Prop({ type: Number, required: false })
@@ -21,8 +34,8 @@ export class SalesEntity extends Document {
   @Prop({ type: Number, required: true })
   quantitySold: number;
 
-  @Prop({ type: String, default: '00/00/0000' })
-  date: string;
+  @Prop({ type: String, default: Date.now(), required: false })
+  date?: Date;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(SalesEntity);

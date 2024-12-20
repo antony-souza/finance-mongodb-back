@@ -1,18 +1,24 @@
 import { Transform } from 'class-transformer';
 import { IsString, IsNumber, IsOptional } from 'class-validator';
-import { ProductEntity } from 'src/models/products/entities/product.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
 
 export class CreateSaleDto {
   @IsOptional()
-  id?: string;
+  _id?: string;
+
+  @IsString()
+  productName: string;
 
   @IsString()
   product_id: string;
 
   @IsString()
+  userName: string;
+
+  @IsString()
   user_id: string;
+
+  @IsString()
+  storeName: string;
 
   @IsString()
   store_id: string;
@@ -27,5 +33,5 @@ export class CreateSaleDto {
 
   @IsString()
   @IsOptional()
-  date?: string;
+  date?: Date;
 }
