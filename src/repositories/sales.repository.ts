@@ -177,8 +177,4 @@ export class SalesRepository {
       },
     ]);
   }
-
-  async findAllSales() {
-    return await this.salesModel.find();
-  }
 }

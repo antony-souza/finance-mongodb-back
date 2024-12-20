@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
+import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 
 export interface IBillingsStore {
   id: string;
@@ -37,15 +38,16 @@ export class SalesService {
     return createSales;
   }
 
-  async getBillingsByStore(store_id: string): Promise<IBillingsStore[]> {
+  async getBillingsByStoreForCharts(store_id: string) {
     return await this.salesRepository.getBillingsByStore(store_id);
   }
 
-  async findAllSalesByStore(storeId: string) {
-    return await this.salesRepository.findAllSalesByStore(storeId);
-  }
+  async getAllSalesByStore(storeId: string) {
+    const sales = await this.salesRepository.findAllSalesByStore(storeId);
 
-  async findAllSales() {
-    return await this.salesRepository.findAllSales();
+    return sales.map((sale) => ({
+      ...sale,
+      totalBilled: formatPrice(sale.totalBilled),
+    }));
   }
 }

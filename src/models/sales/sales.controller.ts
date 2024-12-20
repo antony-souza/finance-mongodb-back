@@ -13,11 +13,11 @@ export class SalesController {
 
   @Get('/billings/:store_id')
   getBillingsByStore(@Param('store_id') store_id: string) {
-    return this.salesService.getBillingsByStore(store_id);
+    return this.salesService.getBillingsByStoreForCharts(store_id);
   }
 
   @Get('/store/:store_id')
   findAllSalesByStore(@Param('store_id') store_id: string) {
-    return this.salesService.findAllSalesByStore(store_id);
+    return this.salesService.getAllSalesByStore(store_id);
   }
 }
