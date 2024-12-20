@@ -2,6 +2,13 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
 
+export interface IBillingsStore {
+  id: string;
+  name: string;
+  totalBilled: number;
+  quantitySold: number;
+}
+
 @Injectable()
 export class SalesService {
   constructor(private readonly salesRepository: SalesRepository) {}
@@ -28,5 +35,13 @@ export class SalesService {
     });
 
     return createSales;
+  }
+
+  async getBillingsByStore(store_id: string): Promise<IBillingsStore[]> {
+    return await this.salesRepository.getBillingsByStore(store_id);
+  }
+
+  async findAllSales() {
+    return await this.salesRepository.findAllSales();
   }
 }

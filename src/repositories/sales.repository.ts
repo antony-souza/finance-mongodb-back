@@ -4,6 +4,7 @@ import { Model, ObjectId } from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
 import { CreateSaleDto } from 'src/models/sales/dto/create-sale.dto';
 import { SalesEntity } from 'src/models/sales/entities/sale.entity';
+import { IBillingsStore } from 'src/models/sales/sales.service';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 @Injectable()
@@ -46,42 +47,54 @@ export class SalesRepository {
     return product;
   }
 
-  async getBillingsByStore(storeId: string) {
+  async getBillingsByStore(storeId: string): Promise<IBillingsStore[]> {
     const query = await this.salesModel.aggregate([
       {
         $match: {
-          store: storeId,
+          store_id: `${storeId}`,
+        },
+      },
+      {
+        $set: {
+          product_id: {
+            $toObjectId: '$product_id',
+          },
         },
       },
       {
         $lookup: {
           from: 'products',
-          localField: '_id',
+          localField: 'product_id',
           foreignField: '_id',
-          as: 'prevProducts',
+          as: 'productsData',
         },
       },
       {
-        $unwind: '$prevProducts',
+        $unwind: {
+          path: '$productsData',
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $group: {
           _id: '$product_id',
-          productName: { $first: '$prevProducts.name' },
-          totalBilled: { $sum: '$totalBilled' },
-          quantitySold: { $sum: '$quantitySold' },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          store: '$_id',
-          totalBilled: 1,
-          quantitySold: 1,
-          products: '$prevProducts',
+          name: {
+            $first: '$productsData.name',
+          },
+          quantitySold: {
+            $sum: '$quantitySold',
+          },
+          totalBilled: {
+            $sum: '$totalBilled',
+          },
         },
       },
     ]);
+
     return query;
+  }
+
+  async findAllSales() {
+    return await this.salesModel.find();
   }
 }
