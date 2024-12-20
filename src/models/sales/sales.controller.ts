@@ -16,11 +16,6 @@ export class SalesController {
     return this.salesService.getBillingsByStore(store_id);
   }
 
-  @Get('/all')
-  findAllSales() {
-    return this.salesService.findAllSales();
-  }
-
   @Get('/store/:store_id')
   findAllSalesByStore(@Param('store_id') store_id: string) {
     return this.salesService.findAllSalesByStore(store_id);
