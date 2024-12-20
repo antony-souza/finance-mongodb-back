@@ -28,7 +28,7 @@ export class SalesRepository {
       await this.storeModel.findByIdAndUpdate(
         createSales.store_id,
         {
-          $addToSet: { sales: createSales.id },
+          $set: { sales: createSales.id },
         },
         { new: true },
       );
@@ -48,7 +48,7 @@ export class SalesRepository {
   }
 
   async getBillingsByStore(storeId: string): Promise<IBillingsStore[]> {
-    const query = await this.salesModel.aggregate([
+    return await this.salesModel.aggregate([
       {
         $match: {
           store_id: `${storeId}`,
@@ -89,9 +89,14 @@ export class SalesRepository {
           },
         },
       },
+      {
+        $project: {
+          name: '$name',
+          quantitySold: '$quantitySold',
+          totalBilled: '$totalBilled',
+        },
+      },
     ]);
-
-    return query;
   }
 
   async findAllSales() {
