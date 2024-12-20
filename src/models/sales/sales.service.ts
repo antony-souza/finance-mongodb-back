@@ -29,7 +29,7 @@ export class SalesService {
       createSaleDto.quantitySold,
     );
 
-    const createSales = await this.salesRepository.create({
+    const createSales = await this.salesRepository.createSales({
       ...createSaleDto,
       totalBilled: totalBilled,
     });
@@ -39,6 +39,10 @@ export class SalesService {
 
   async getBillingsByStore(store_id: string): Promise<IBillingsStore[]> {
     return await this.salesRepository.getBillingsByStore(store_id);
+  }
+
+  async findAllSalesByStore(storeId: string) {
+    return await this.salesRepository.findAllSalesByStore(storeId);
   }
 
   async findAllSales() {

@@ -21,14 +21,14 @@ export class SalesRepository {
     return product;
   }
 
-  async create(createSaleDto: CreateSaleDto): Promise<SalesEntity> {
+  async createSales(createSaleDto: CreateSaleDto): Promise<SalesEntity> {
     const createSales = await this.salesModel.create(createSaleDto);
 
     if (createSales.store_id) {
       await this.storeModel.findByIdAndUpdate(
         createSales.store_id,
         {
-          $set: { sales: createSales.id },
+          $set: { sales: createSales._id },
         },
         { new: true },
       );
@@ -91,9 +91,88 @@ export class SalesRepository {
       },
       {
         $project: {
+          _id: 0,
+          product_id: '$_id',
           name: '$name',
           quantitySold: '$quantitySold',
           totalBilled: '$totalBilled',
+        },
+      },
+    ]);
+  }
+
+  async findAllSalesByStore(storeId: string) {
+    return await this.salesModel.aggregate([
+      {
+        $match: {
+          store_id: `${storeId}`,
+        },
+      },
+      {
+        $set: {
+          product_id: {
+            $toObjectId: '$product_id',
+          },
+          user_id: {
+            $toObjectId: '$user_id',
+          },
+          store_id: {
+            $toObjectId: '$store_id',
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'usersData',
+        },
+      },
+      {
+        $lookup: {
+          from: 'stores',
+          localField: 'store_id',
+          foreignField: '_id',
+          as: 'storesData',
+        },
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'product_id',
+          foreignField: '_id',
+          as: 'productsData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$storesData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: '$usersData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: '$productsData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          productId: '$product_id',
+          productName: '$productsData.name',
+          quantitySold: '$quantitySold',
+          totalBilled: '$totalBilled',
+          userName: '$usersData.name',
+          userImg: '$usersData.image_url',
+          storeName: '$storesData.name',
         },
       },
     ]);

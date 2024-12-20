@@ -12,17 +12,12 @@ export class ProductRepository {
   ) {}
 
   async findProductByName(name: string, store: string) {
-    return this.productModel.where({ name, store }).findOne();
+    return this.productModel.findOne({ name: name, store: store });
   }
 
   async findOneProduct(id: string) {
-    // Verifique se o ID é válido antes de realizar a consulta
-    if (!Types.ObjectId.isValid(id)) {
-      throw new Error('Invalid ObjectId format');
-    }
-
     const product = await this.productModel.findOne({
-      _id: new Types.ObjectId(id),
+      id: id,
     });
     console.log(product);
     return product;
