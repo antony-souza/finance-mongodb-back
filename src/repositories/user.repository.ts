@@ -58,4 +58,44 @@ export class UserRepository {
     }
     return;
   }
+
+  async getAllUsersByStore(storeId: string) {
+    return await this.userModel.aggregate([
+      {
+        $match: {
+          store: `${storeId}`,
+        },
+      },
+      {
+        $set: {
+          store: {
+            $toObjectId: '$store',
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'stores',
+          localField: 'store',
+          foreignField: '_id',
+          as: 'storeData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$storeData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          email: 1,
+          image_url: 1,
+          store: '$storeData.name',
+        },
+      },
+    ]);
+  }
 }

@@ -27,6 +27,11 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @Get('/store/:store_id')
+  getAllUsersByStore(@Param('store_id') store_id: string) {
+    return this.usersService.findAllUsersByStore(store_id);
+  }
+
   @Post('/create')
   @UseInterceptors(FileInterceptor('image_url'))
   create(
