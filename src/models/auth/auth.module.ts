@@ -18,6 +18,6 @@ import { JwtAuthService } from 'src/middleware/jwt.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, JwtAuthService],
-  exports: [JwtModule],
+  exports: [JwtAuthService],
 })
 export class AuthModule {}

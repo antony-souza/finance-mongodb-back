@@ -3,7 +3,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { AuthRepository } from 'src/repositories/auth.repository';
 import { JwtAuthService } from 'src/middleware/jwt.service';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   async authUser(createAuthDto: CreateAuthDto) {
-    const user = await this.authRepository.authUser(createAuthDto);
+    const user = await this.authRepository.authUser(createAuthDto.email);
 
     if (!user) {
       throw new ConflictException('Usuário não encontrado');
@@ -26,9 +26,13 @@ export class AuthService {
       throw new ConflictException('Password is incorrect');
     }
 
-    const token = this.jwtService.generateToken(user._id);
+    const token = await this.jwtService.generateToken({
+      id: user._id,
+    });
 
-    return token;
+    return {
+      access_token: token,
+    };
   }
 
   findAll() {

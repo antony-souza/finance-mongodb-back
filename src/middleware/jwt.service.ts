@@ -1,14 +1,17 @@
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { environment } from 'src/environment/environment';
 
+@Injectable()
 export class JwtAuthService {
-  constructor(private jwt: JwtService) {}
+  constructor(private jwtService: JwtService) {}
 
-  async generateToken(payload: any) {
-    return this.jwt.sign(payload, { secret: environment.secreatKey });
+  async generateToken(payload: any): Promise<string> {
+    return this.jwtService.sign(payload);
   }
 
   async verify(token: string) {
-    return this.jwt.verify(token, { secret: environment.secreatKey });
+    return this.jwtService.verify(token, {
+      ignoreExpiration: false,
+    });
   }
 }
