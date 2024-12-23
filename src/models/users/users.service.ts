@@ -3,14 +3,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from 'src/repositories/user.repository';
 import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
-import { TransformIdService } from 'src/utils/transformId.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly transformIdService: TransformIdService,
     private readonly generatePasswordService: GeneratePasswordService,
     private readonly uploadFileFactoryService: UploadFileFactoryService,
   ) {}

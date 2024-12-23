@@ -6,11 +6,14 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { TokenGuards } from 'src/guards/token.guards';
 
+@UseGuards(TokenGuards)
 @Controller('/products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

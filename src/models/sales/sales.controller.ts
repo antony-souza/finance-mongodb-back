@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
+import { TokenGuards } from 'src/guards/token.guards';
 
+@UseGuards(TokenGuards)
 @Controller('/sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}

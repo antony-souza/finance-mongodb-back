@@ -13,7 +13,7 @@ import { JwtAuthService } from 'src/middleware/jwt.service';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
       secret: environment.secreatKey,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '30s' },
     }),
   ],
   controllers: [AuthController],

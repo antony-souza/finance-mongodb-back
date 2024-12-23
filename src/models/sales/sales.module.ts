@@ -8,6 +8,9 @@ import { UserSchema } from '../users/entities/user.entity';
 import { ProductSchema } from '../products/entities/product.entity';
 import { SalesRepository } from 'src/repositories/sales.repository';
 import { ProductRepository } from 'src/repositories/product.repository';
+import { TokenGuards } from 'src/guards/token.guards';
+import { JwtService } from '@nestjs/jwt';
+import { JwtAuthService } from 'src/middleware/jwt.service';
 
 @Module({
   imports: [
@@ -17,6 +20,13 @@ import { ProductRepository } from 'src/repositories/product.repository';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [SalesController],
-  providers: [SalesService, SalesRepository, ProductRepository],
+  providers: [
+    SalesService,
+    SalesRepository,
+    ProductRepository,
+    TokenGuards,
+    JwtService,
+    JwtAuthService,
+  ],
 })
 export class SalesModule {}

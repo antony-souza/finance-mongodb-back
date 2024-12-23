@@ -6,7 +6,7 @@ import { UserSchema } from './entities/user.entity';
 import { UserRepository } from 'src/repositories/user.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
-import { TransformIdService } from 'src/utils/transformId.service';
+
 import { StoreSchema } from '../stores/entities/store.entity';
 
 @Module({
@@ -20,7 +20,6 @@ import { StoreSchema } from '../stores/entities/store.entity';
     UserRepository,
     UploadFileFactoryService,
     GeneratePasswordService,
-    TransformIdService,
   ],
 })
 export class UsersModule {}
