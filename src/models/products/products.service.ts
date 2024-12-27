@@ -26,8 +26,8 @@ export class ProductsService {
     });
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAllByStore(storeId: string) {
+    return await this.productRepository.findAllByStore(storeId);
   }
 
   async findOne(id: string) {

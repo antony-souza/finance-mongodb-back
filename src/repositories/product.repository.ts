@@ -15,6 +15,67 @@ export class ProductRepository {
     return this.productModel.findOne({ name: name, store: store });
   }
 
+  async findAllByStore(store: string) {
+    return await this.productModel.aggregate([
+      {
+        $match: {
+          store: `${store}`,
+        },
+      },
+      {
+        $set: {
+          store: {
+            $toObjectId: '$store',
+          },
+          categories: {
+            $toObjectId: '$categories',
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'stores',
+          localField: 'store',
+          foreignField: '_id',
+          as: 'storeData',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'categories',
+          foreignField: '_id',
+          as: 'categoriesData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$storeData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: '$categoriesData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          product_id: '$name',
+          product_price: '$price',
+          product_description: '$description',
+          product_image_url: '$image_url',
+          product_quantity: '$stock',
+          category_name: '$categoriesData.name',
+          store_id: '$store',
+          store_name: '$storeData.name',
+        },
+      },
+    ]);
+  }
+
   async findOneProduct(id: string) {
     const product = await this.productModel.findOne({
       id: id,

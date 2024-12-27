@@ -31,9 +31,9 @@ export class ProductsController {
     });
   }
 
-  @Get()
-  findAll() {
-    return this.productsService.findAll();
+  @Get('/store/all/:storeId')
+  findAllByStore(@Param('storeId') storeId: string) {
+    return this.productsService.findAllByStore(storeId);
   }
 
   @Get('/:id')
