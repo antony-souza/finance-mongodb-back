@@ -15,11 +15,11 @@ export class ProductRepository {
     return this.productModel.findOne({ name: name, store: store });
   }
 
-  async findAllByStore(store: string) {
+  async findAllByStore(storeId: string) {
     return await this.productModel.aggregate([
       {
         $match: {
-          store: `${store}`,
+          store: `${storeId}`,
         },
       },
       {
@@ -63,7 +63,8 @@ export class ProductRepository {
       {
         $project: {
           _id: 0,
-          product_id: '$name',
+          product_id: '$_id',
+          product_name: '$name',
           product_price: '$price',
           product_description: '$description',
           product_image_url: '$image_url',
