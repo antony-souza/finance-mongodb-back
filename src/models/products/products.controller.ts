@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -38,5 +39,17 @@ export class ProductsController {
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
+  }
+
+  @Put('/update')
+  @UseInterceptors(FileInterceptor('image_url'))
+  update(
+    @Body() updateProductDto: CreateProductDto,
+    @UploadedFile() image_url: Express.Multer.File,
+  ) {
+    return this.productsService.update({
+      ...updateProductDto,
+      image_url: image_url,
+    });
   }
 }

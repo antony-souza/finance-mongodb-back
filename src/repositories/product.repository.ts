@@ -36,4 +36,20 @@ export class ProductRepository {
 
     return newProduct;
   }
+
+  async updateProduct(id: string, data: Partial<ProductEntity>) {
+    return await this.productModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async deleteProduct(id: string) {
+    const deleteProduct = await this.productModel.findByIdAndDelete(id);
+
+    if (deleteProduct.store) {
+      this.storeModel.findByIdAndUpdate(
+        deleteProduct.store,
+        { $pull: { products: deleteProduct._id } },
+        { new: true },
+      );
+    }
+  }
 }
