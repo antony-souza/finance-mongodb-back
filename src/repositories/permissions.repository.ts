@@ -10,7 +10,9 @@ export class PermissionsRepository {
     private readonly permissionModel: Model<PermissionEntity>,
   ) {}
 
-  async createPermission(permissions: PermissionEntity) {
+  async createPermission(
+    permissions: PermissionEntity,
+  ): Promise<PermissionEntity> {
     return await this.permissionModel.create(permissions);
   }
 
