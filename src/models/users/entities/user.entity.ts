@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { RoleEntity } from 'src/models/roles/entities/role.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { v4 as uuidv4 } from 'uuid';
 @Schema()
@@ -27,6 +28,9 @@ export class UserEntity {
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: false })
   store: StoreEntity;
+
+  @Prop({ type: [mongoose.Types.UUID], ref: 'Role', required: true })
+  role: RoleEntity[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

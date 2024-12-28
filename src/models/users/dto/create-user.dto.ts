@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { RoleEntity } from 'src/models/roles/entities/role.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 export class CreateUserDto {
@@ -20,4 +21,7 @@ export class CreateUserDto {
 
   @IsOptional()
   store: StoreEntity;
+
+  @IsOptional()
+  role: RoleEntity[];
 }
