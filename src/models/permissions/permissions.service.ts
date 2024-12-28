@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { PermissionsRepository } from 'src/repositories/permissions.repository';
 
 @Injectable()
 export class PermissionsService {
-  create(createPermissionDto: CreatePermissionDto) {
-    return 'This action adds a new permission';
+  constructor(private readonly permissionRepository: PermissionsRepository) {}
+
+  createPermission(createPermissionDto: CreatePermissionDto) {
+    return this.permissionRepository.createPermission(createPermissionDto);
   }
 
   findAll() {

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
-@Schema()
+@Schema({ timestamps: true })
 export class PermissionEntity {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;
