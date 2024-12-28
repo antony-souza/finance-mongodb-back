@@ -10,6 +10,8 @@ import { CategoriesModule } from './models/categories/categories.module';
 import { ProductsModule } from './models/products/products.module';
 import { SalesModule } from './models/sales/sales.module';
 import { AuthModule } from './models/auth/auth.module';
+import { RolesModule } from './models/roles/roles.module';
+import { PermissionsModule } from './models/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AuthModule } from './models/auth/auth.module';
     ProductsModule,
     SalesModule,
     AuthModule,
+    RolesModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
