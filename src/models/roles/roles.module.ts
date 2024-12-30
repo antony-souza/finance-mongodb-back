@@ -4,9 +4,15 @@ import { RolesController } from './roles.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RoleSchema } from './entities/role.entity';
 import { RolesRepository } from 'src/repositories/roles.repository';
+import { PermissionSchema } from '../permissions/entities/permission.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Role', schema: RoleSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'Role', schema: RoleSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Permission', schema: PermissionSchema },
+    ]),
+  ],
   controllers: [RolesController],
   providers: [RolesService, RolesRepository],
 })
