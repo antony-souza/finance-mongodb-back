@@ -10,5 +10,9 @@ export class CreateRoleDto {
   name: string;
 
   @IsString()
+  @IsOptional()
+  prermissionsName?: string[];
+
+  @IsString()
   permissions: PermissionEntity[];
 }

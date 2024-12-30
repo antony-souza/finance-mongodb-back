@@ -34,7 +34,10 @@ export class RolesRepository {
     const createdRole = await this.roleModel.create(roles);
 
     if (createdRole.permissions) {
-      await this.roleModel.updateOne({ permissions: createdRole.permissions });
+      await this.roleModel.updateMany({
+        permissions: createdRole.permissions,
+        prermissionsName: checkPermissions.name,
+      });
     }
 
     return createdRole;
