@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { RoleEntity } from 'src/models/roles/entities/role.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 
@@ -9,10 +10,18 @@ export class UserRepository {
   constructor(
     @InjectModel('User') private readonly userModel: Model<UserEntity>,
     @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
+    @InjectModel('Role') private readonly roleStoreModel: Model<RoleEntity>,
   ) {}
 
   async createUser(userData: UserEntity): Promise<UserEntity> {
     const createUser = await this.userModel.create(userData);
+    const checkRoles = await this.userModel.findOne({
+      roles: createUser.role,
+    });
+
+    if (!checkRoles) {
+      throw new NotFoundException('Role not found');
+    }
 
     if (createUser.store) {
       await this.storeModel.findByIdAndUpdate(
@@ -22,6 +31,13 @@ export class UserRepository {
         },
         { new: true },
       );
+    }
+
+    if (createUser.role) {
+      await this.userModel.updateMany({
+        rolesNames: checkRoles.roleName,
+        roles: checkRoles._id,
+      });
     }
 
     return createUser;

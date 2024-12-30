@@ -29,8 +29,11 @@ export class UserEntity {
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: false })
   store: StoreEntity;
 
-  @Prop({ type: [mongoose.Types.UUID], ref: 'Role', required: true })
-  role: RoleEntity[];
+  @Prop({ type: String, required: false })
+  roleName?: string;
+
+  @Prop({ type: mongoose.Types.UUID, ref: 'Role', required: true })
+  role: RoleEntity;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

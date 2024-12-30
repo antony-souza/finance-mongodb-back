@@ -12,6 +12,8 @@ import { SalesModule } from './models/sales/sales.module';
 import { AuthModule } from './models/auth/auth.module';
 import { RolesModule } from './models/roles/roles.module';
 import { PermissionsModule } from './models/permissions/permissions.module';
+import { WebSocketGatewayModule } from './websocket/websocket.module';
+import { SocketGateway } from './websocket/websocket.gateway';
 
 @Module({
   imports: [
@@ -27,8 +29,9 @@ import { PermissionsModule } from './models/permissions/permissions.module';
     AuthModule,
     RolesModule,
     PermissionsModule,
+    WebSocketGatewayModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SocketGateway],
 })
 export class AppModule {}

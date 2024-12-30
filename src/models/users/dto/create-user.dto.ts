@@ -23,5 +23,9 @@ export class CreateUserDto {
   store: StoreEntity;
 
   @IsOptional()
-  role: RoleEntity[];
+  @IsString()
+  roleName?: string;
+
+  @IsOptional()
+  role: RoleEntity;
 }
