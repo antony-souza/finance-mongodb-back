@@ -18,6 +18,10 @@ export class UsersService {
       createUserDto.password,
     );
 
+    if (!createUserDto.role) {
+      throw new NotFoundException('Role not provided');
+    }
+
     let url = '';
     if (createUserDto.image_url) {
       url = await this.uploadFileFactoryService.upload(createUserDto.image_url);

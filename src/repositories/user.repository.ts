@@ -14,14 +14,19 @@ export class UserRepository {
   ) {}
 
   async createUser(userData: UserEntity): Promise<UserEntity> {
-    const createUser = await this.userModel.create(userData);
-    const checkRoles = await this.userModel.findOne({
-      roles: createUser.role,
+    const checkRoles = await this.roleStoreModel.findOne({
+      _id: userData.role,
     });
 
     if (!checkRoles) {
       throw new NotFoundException('Role not found');
     }
+
+    const createUser = await this.userModel.create({
+      ...userData,
+      roleName: checkRoles.name,
+      role: checkRoles._id,
+    });
 
     if (createUser.store) {
       await this.storeModel.findByIdAndUpdate(
@@ -31,13 +36,6 @@ export class UserRepository {
         },
         { new: true },
       );
-    }
-
-    if (createUser.role) {
-      await this.userModel.updateMany({
-        rolesNames: checkRoles.roleName,
-        roles: checkRoles._id,
-      });
     }
 
     return createUser;

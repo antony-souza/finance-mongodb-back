@@ -28,7 +28,7 @@ export class SalesRepository {
       await this.storeModel.findByIdAndUpdate(
         createSales.store_id,
         {
-          $set: { sales: createSales._id },
+          $addToSet: { sales: createSales._id },
         },
         { new: true },
       );
