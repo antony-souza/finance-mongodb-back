@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { CategoriesEntity } from 'src/models/categories/entities/category.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { v4 as uuidv4 } from 'uuid';
-@Schema()
+@Schema({ versionKey: false, timestamps: true })
 export class ProductEntity {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;

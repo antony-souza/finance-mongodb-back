@@ -15,6 +15,10 @@ export class ProductRepository {
     return this.productModel.findOne({ name: name, store: store });
   }
 
+  async getAllProductsByStore(storeId: string) {
+    return this.productModel.find({ store: storeId }).lean();
+  }
+
   async findAllByStore(storeId: string) {
     return await this.productModel.aggregate([
       {

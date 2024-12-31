@@ -5,7 +5,7 @@ import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 
-@Schema({ collection: 'sales' })
+@Schema({ versionKey: false, timestamps: true })
 export class SalesEntity extends Document {
   @Prop({ type: String, default: uuidv4, required: false })
   _id: string;

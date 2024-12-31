@@ -14,6 +14,7 @@ import { RolesModule } from './models/roles/roles.module';
 import { PermissionsModule } from './models/permissions/permissions.module';
 import { WebSocketGatewayModule } from './websocket/websocket.module';
 import { SocketGateway } from './websocket/websocket.gateway';
+import { SheetsModule } from './models/sheets/sheets.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SocketGateway } from './websocket/websocket.gateway';
     AuthModule,
     RolesModule,
     PermissionsModule,
+    SheetsModule,
     WebSocketGatewayModule,
   ],
   controllers: [AppController],

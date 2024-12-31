@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { RoleEntity } from 'src/models/roles/entities/role.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { v4 as uuidv4 } from 'uuid';
-@Schema()
+@Schema({ versionKey: false, timestamps: true })
 export class UserEntity {
   @Prop({ type: String, required: false, default: uuidv4 })
   _id?: string;
