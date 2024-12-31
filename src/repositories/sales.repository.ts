@@ -148,6 +148,7 @@ export class SalesRepository {
           _id: 0,
           productId: '$product_id',
           productName: '$productsData.name',
+          productImg: '$productsData.image_url',
           quantitySold: '$quantitySold',
           totalBilled: '$totalBilled',
           userName: '$usersData.name',
