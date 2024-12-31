@@ -81,13 +81,6 @@ export class UserRepository {
         },
       },
       {
-        $set: {
-          store: {
-            $toObjectId: '$store',
-          },
-        },
-      },
-      {
         $lookup: {
           from: 'stores',
           localField: 'store',

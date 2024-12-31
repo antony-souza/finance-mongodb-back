@@ -1,10 +1,14 @@
 import * as xlsx from 'xlsx';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from 'src/repositories/product.repository';
+import { SalesRepository } from 'src/repositories/sales.repository';
 
 @Injectable()
 export class SheetsService {
-  constructor(private readonly productRepository: ProductRepository) {}
+  constructor(
+    private readonly productRepository: ProductRepository,
+    private readonly salesRepository: SalesRepository,
+  ) {}
 
   generateBufferSheets(data: any[]) {
     const convertedToBinaryBuffer = xlsx.utils.json_to_sheet(data);
@@ -29,6 +33,18 @@ export class SheetsService {
     }
 
     const data = this.generateBufferSheets(productsData);
+
+    return data;
+  }
+
+  async generateBillingSheetByStore(id: string) {
+    const salesData = await this.salesRepository.getBillingsByStore(id);
+
+    if (!salesData || salesData.length === 0) {
+      throw new NotFoundException('Sales not found');
+    }
+
+    const data = this.generateBufferSheets(salesData);
 
     return data;
   }

@@ -21,4 +21,23 @@ export class SheetsController {
 
     return res.send(data);
   }
+
+  @Get('/generate-billing-sheet/:id')
+  async generateBillingSheetByStore(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.sheetsService.generateBillingSheetByStore(id);
+
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="billings-${id}.xlsx"`,
+    );
+
+    return res.send(data);
+  }
 }

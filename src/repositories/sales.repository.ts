@@ -55,13 +55,6 @@ export class SalesRepository {
         },
       },
       {
-        $set: {
-          product_id: {
-            $toObjectId: '$product_id',
-          },
-        },
-      },
-      {
         $lookup: {
           from: 'products',
           localField: 'product_id',
@@ -106,19 +99,6 @@ export class SalesRepository {
       {
         $match: {
           store_id: `${storeId}`,
-        },
-      },
-      {
-        $set: {
-          product_id: {
-            $toObjectId: '$product_id',
-          },
-          user_id: {
-            $toObjectId: '$user_id',
-          },
-          store_id: {
-            $toObjectId: '$store_id',
-          },
         },
       },
       {

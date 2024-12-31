@@ -27,16 +27,6 @@ export class ProductRepository {
         },
       },
       {
-        $set: {
-          store: {
-            $toObjectId: '$store',
-          },
-          categories: {
-            $toObjectId: '$categories',
-          },
-        },
-      },
-      {
         $lookup: {
           from: 'stores',
           localField: 'store',
