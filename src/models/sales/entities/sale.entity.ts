@@ -33,9 +33,6 @@ export class SalesEntity extends Document {
 
   @Prop({ type: Number, required: true })
   quantitySold: number;
-
-  @Prop({ type: String, default: Date.now(), required: false })
-  date?: Date;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(SalesEntity);

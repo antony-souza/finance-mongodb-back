@@ -150,8 +150,22 @@ export class SalesRepository {
           productName: '$productsData.name',
           productImg: '$productsData.image_url',
           quantitySold: '$quantitySold',
+          date: {
+            $dateToString: {
+              format: '%d-%m-%Y',
+              date: '$createdAt',
+            },
+          },
+          hour: {
+            $dateToString: {
+              format: '%H:%M:%S',
+              date: '$createdAt',
+              timezone: 'America/Sao_Paulo',
+            },
+          },
           totalBilled: '$totalBilled',
           userName: '$usersData.name',
+          userRole: '$usersData.roleName',
           userImg: '$usersData.image_url',
           storeName: '$storesData.name',
         },
