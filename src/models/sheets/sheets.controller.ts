@@ -14,10 +14,7 @@ export class SheetsController {
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     );
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="products-${id}.xlsx"`,
-    );
+    res.setHeader('Content-Disposition', 'attachment');
 
     return res.send(data);
   }
@@ -33,10 +30,23 @@ export class SheetsController {
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     );
+    res.setHeader('Content-Disposition', 'attachment');
+
+    return res.send(data);
+  }
+
+  @Get('/generate-sales-sheet/:id')
+  async generateSalesSheetByStore(
+    @Param('id') storeId: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.sheetsService.generateSalesSheetByStore(storeId);
+
     res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="billings-${id}.xlsx"`,
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     );
+    res.setHeader('Content-Disposition', 'attachment');
 
     return res.send(data);
   }

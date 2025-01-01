@@ -48,4 +48,16 @@ export class SheetsService {
 
     return data;
   }
+
+  async generateSalesSheetByStore(storeId: string) {
+    const salesData = await this.salesRepository.findAllSalesByStore(storeId);
+
+    if (!salesData || salesData.length === 0) {
+      throw new NotFoundException('Sales not found');
+    }
+
+    const data = this.generateBufferSheets(salesData);
+
+    return data;
+  }
 }
