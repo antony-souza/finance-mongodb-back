@@ -96,9 +96,12 @@ export class UserRepository {
       },
       {
         $project: {
-          _id: 1,
+          _id: 0,
+          id: '$_id',
           name: 1,
           image_url: 1,
+          email: 1,
+          role: '$roleName',
           store: '$storeData.name',
         },
       },
