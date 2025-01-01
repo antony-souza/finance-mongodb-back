@@ -7,6 +7,20 @@ import { SalesEntity } from 'src/models/sales/entities/sale.entity';
 import { IBillingsStore } from 'src/models/sales/sales.service';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
+export interface ISalesResponse {
+  productId: string;
+  productName: string;
+  productImg: string;
+  quantitySold: number;
+  date: string;
+  hour: string;
+  totalBilled: number;
+  userName: string;
+  userRole: string;
+  userImg: string;
+  storeName: string;
+}
+
 @Injectable()
 export class SalesRepository {
   constructor(
@@ -94,7 +108,7 @@ export class SalesRepository {
     ]);
   }
 
-  async findAllSalesByStore(storeId: string) {
+  async findAllSalesByStore(storeId: string): Promise<ISalesResponse[]> {
     return await this.salesModel.aggregate([
       {
         $match: {

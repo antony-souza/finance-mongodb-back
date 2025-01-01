@@ -2,6 +2,7 @@ import * as xlsx from 'xlsx';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from 'src/repositories/product.repository';
 import { SalesRepository } from 'src/repositories/sales.repository';
+import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 
 @Injectable()
 export class SheetsService {
@@ -56,7 +57,21 @@ export class SheetsService {
       throw new NotFoundException('Sales not found');
     }
 
-    const data = this.generateBufferSheets(salesData);
+    const mapSalesData = salesData.map((sales) => {
+      const data = {
+        Loja: sales.storeName,
+        Produto: sales.productName,
+        Quantidade: sales.quantitySold,
+        Faturamento: formatPrice(sales.totalBilled),
+        Vendedor: sales.userName,
+        Cargo: sales.userRole,
+        Data: sales.date,
+        Horário: sales.hour,
+      };
+      return data;
+    });
+
+    const data = this.generateBufferSheets(mapSalesData);
 
     return data;
   }
