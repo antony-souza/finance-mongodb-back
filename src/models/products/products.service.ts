@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductRepository } from 'src/repositories/product.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
@@ -35,13 +35,12 @@ export class ProductsService {
   }
 
   async update(updateUserDto: UpdateProductDto) {
-    const findProduct = await this.productRepository.findProductByName(
-      updateUserDto.name,
-      updateUserDto.store._id,
+    const findProduct = await this.productRepository.findOneProduct(
+      updateUserDto._id,
     );
 
     if (!findProduct) {
-      throw new NotAcceptableException('Product not found');
+      throw new NotFoundException('Product not found');
     }
 
     let url = findProduct.image_url;
@@ -50,7 +49,7 @@ export class ProductsService {
       url = await this.uploadService.upload(updateUserDto.image_url);
     }
 
-    return this.productRepository.updateProduct(findProduct._id, {
+    return this.productRepository.updateProduct(updateUserDto._id, {
       ...updateUserDto,
       image_url: url,
     });

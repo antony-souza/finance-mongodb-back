@@ -36,7 +36,7 @@ export class CategoriesRepository {
       },
       {
         $lookup: {
-          from: 'stores',
+          from: 'store',
           localField: 'store',
           foreignField: '_id',
           as: 'storeData',

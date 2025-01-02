@@ -5,7 +5,7 @@ import { StoreEntity } from 'src/models/stores/entities/store.entity';
 
 export class CreateProductDto {
   @IsOptional()
-  id?: string;
+  _id?: string;
 
   @IsString()
   name: string;

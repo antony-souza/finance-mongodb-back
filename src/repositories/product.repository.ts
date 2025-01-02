@@ -73,9 +73,9 @@ export class ProductRepository {
 
   async findOneProduct(id: string) {
     const product = await this.productModel.findOne({
-      id: id,
+      _id: id,
     });
-    console.log(product);
+
     return product;
   }
 
@@ -94,7 +94,7 @@ export class ProductRepository {
   }
 
   async updateProduct(id: string, data: Partial<ProductEntity>) {
-    return await this.productModel.findByIdAndUpdate(id, data, { new: true });
+    return await this.productModel.updateOne({ _id: id }, data);
   }
 
   async deleteProduct(id: string) {

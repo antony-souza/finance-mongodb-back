@@ -13,6 +13,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenGuards } from 'src/guards/token.guards';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @UseGuards(TokenGuards)
 @Controller('/products')
@@ -41,14 +42,16 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
-  @Put('/update')
+  @Put('/update/:id')
   @UseInterceptors(FileInterceptor('image_url'))
   update(
-    @Body() updateProductDto: CreateProductDto,
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
     @UploadedFile() image_url: Express.Multer.File,
   ) {
     return this.productsService.update({
       ...updateProductDto,
+      _id: id,
       image_url: image_url,
     });
   }

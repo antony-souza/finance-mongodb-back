@@ -29,7 +29,7 @@ export class TokenGuards implements CanActivate {
       request.user = payload;
       return true;
     } catch {
-      throw new UnauthorizedException('Token inválido ou expirado');
+      throw new UnauthorizedException('Token inválido');
     }
   }
 }
