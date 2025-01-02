@@ -30,6 +30,9 @@ export class UserEntity {
   store: StoreEntity;
 
   @Prop({ type: String, required: false })
+  storeName?: string;
+
+  @Prop({ type: String, required: false })
   roleName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Role', required: true })

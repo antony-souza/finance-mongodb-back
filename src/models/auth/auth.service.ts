@@ -35,6 +35,7 @@ export class AuthService {
         name: user.name,
         image_url: user.image_url,
         store_id: user.store,
+        storeName: user.store.name,
         role: user.roleName,
         id: user._id,
       },

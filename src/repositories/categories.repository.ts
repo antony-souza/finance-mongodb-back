@@ -28,9 +28,9 @@ export class CategoriesRepository {
   }
 
   async getCategoriesByStore(storeId: string) {
-    return (
-      await this.storeModel.findById(storeId).select('name categories')
-    ).populate('categories', 'name image_url');
+    return await this.categoriesModel
+      .find({ store: storeId })
+      .select('_id name image_url');
   }
 
   async getCategoryById(id: string) {

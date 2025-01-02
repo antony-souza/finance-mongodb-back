@@ -20,6 +20,10 @@ export class CreateUserDto {
   image_url?: Express.Multer.File;
 
   @IsOptional()
+  @IsString()
+  storeName?: string;
+
+  @IsOptional()
   store: StoreEntity;
 
   @IsOptional()

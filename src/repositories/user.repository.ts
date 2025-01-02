@@ -10,20 +10,26 @@ export class UserRepository {
   constructor(
     @InjectModel('User') private readonly userModel: Model<UserEntity>,
     @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
-    @InjectModel('Role') private readonly roleStoreModel: Model<RoleEntity>,
+    @InjectModel('Role') private readonly rolesModel: Model<RoleEntity>,
   ) {}
 
   async createUser(userData: UserEntity): Promise<UserEntity> {
-    const checkRoles = await this.roleStoreModel.findOne({
-      _id: userData.role,
-    });
+    const [checkRoles, checkStores] = await Promise.all([
+      await this.rolesModel.findById(userData.role),
+      await this.storeModel.findById(userData.store),
+    ]);
 
     if (!checkRoles) {
       throw new NotFoundException('Role not found');
     }
 
+    if (!checkStores) {
+      throw new NotFoundException('Store not found');
+    }
+
     const createUser = await this.userModel.create({
       ...userData,
+      storeName: checkStores.name,
       roleName: checkRoles.name,
       role: checkRoles._id,
     });
