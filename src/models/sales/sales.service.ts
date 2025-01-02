@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
 import { formatPrice } from 'src/utils/formatPrice/formatPricer';
@@ -15,23 +19,34 @@ export class SalesService {
   constructor(private readonly salesRepository: SalesRepository) {}
 
   async create(createSaleDto: CreateSaleDto) {
-    const existingProduct = await this.salesRepository.findProductById(
-      createSaleDto.product_id,
-    );
+    const checkProductUserStore =
+      await this.salesRepository.findProductsAndUser(
+        createSaleDto.product_id,
+        createSaleDto.user_id,
+        createSaleDto.store_id,
+      );
 
-    if (existingProduct.stock < createSaleDto.quantitySold) {
+    if (!checkProductUserStore) {
+      throw new NotFoundException('Product, User or Store not found - Service');
+    }
+
+    if (checkProductUserStore.checkProduct.stock < createSaleDto.quantitySold) {
       throw new ConflictException('Product out of stock');
     }
 
-    const totalBilled = createSaleDto.quantitySold * existingProduct.price;
+    const totalBilled =
+      createSaleDto.quantitySold * checkProductUserStore.checkProduct.price;
 
     await this.salesRepository.updateStock(
-      existingProduct.id,
+      checkProductUserStore.checkProduct._id,
       createSaleDto.quantitySold,
     );
 
     const createSales = await this.salesRepository.createSales({
       ...createSaleDto,
+      productName: checkProductUserStore.checkProduct.name,
+      storeName: checkProductUserStore.checkStore.name,
+      userName: checkProductUserStore.checkUser.name,
       totalBilled: totalBilled,
     });
 

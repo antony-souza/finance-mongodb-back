@@ -6,19 +6,22 @@ export class CreateSaleDto {
   _id?: string;
 
   @IsString()
-  productName: string;
+  @IsOptional()
+  productName?: string;
 
   @IsString()
   product_id: string;
 
   @IsString()
-  userName: string;
+  @IsOptional()
+  userName?: string;
 
   @IsString()
   user_id: string;
 
   @IsString()
-  storeName: string;
+  @IsOptional()
+  storeName?: string;
 
   @IsString()
   store_id: string;
@@ -30,8 +33,4 @@ export class CreateSaleDto {
 
   @IsNumber()
   quantitySold: number;
-
-  @IsString()
-  @IsOptional()
-  date?: Date;
 }

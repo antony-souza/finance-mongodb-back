@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
 import { CreateSaleDto } from 'src/models/sales/dto/create-sale.dto';
 import { SalesEntity } from 'src/models/sales/entities/sale.entity';
 import { IBillingsStore } from 'src/models/sales/sales.service';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { UserEntity } from 'src/models/users/entities/user.entity';
 
 export interface ISalesResponse {
   productId: string;
@@ -26,13 +27,28 @@ export class SalesRepository {
   constructor(
     @InjectModel('Sale') private readonly salesModel: Model<SalesEntity>,
     @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
+    @InjectModel('User') private readonly userModel: Model<UserEntity>,
     @InjectModel('Product') private readonly productModel: Model<ProductEntity>,
   ) {}
 
-  async findProductById(productId: string) {
-    const product = await this.productModel.findById(productId);
+  async findProductsAndUser(productId: string, userId, storeId) {
+    const [checkProduct, checkUser, checkStore] = await Promise.all([
+      this.productModel.findById(productId),
+      this.userModel.findById(userId),
+      this.storeModel.findById(storeId),
+    ]);
 
-    return product;
+    if (!checkProduct || !checkUser || !checkStore) {
+      throw new NotFoundException(
+        'Product, User or Store not found - Repository',
+      );
+    }
+
+    return {
+      checkProduct,
+      checkUser,
+      checkStore,
+    };
   }
 
   async createSales(createSaleDto: CreateSaleDto): Promise<SalesEntity> {
@@ -50,7 +66,7 @@ export class SalesRepository {
     return createSales;
   }
 
-  async updateStock(productId: ObjectId, quantitySold: number) {
+  async updateStock(productId: string, quantitySold: number) {
     const product = await this.productModel.findByIdAndUpdate(
       productId,
       {
@@ -158,6 +174,11 @@ export class SalesRepository {
         },
       },
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $project: {
           _id: 0,
           productId: '$product_id',
@@ -166,7 +187,7 @@ export class SalesRepository {
           quantitySold: '$quantitySold',
           date: {
             $dateToString: {
-              format: '%d-%m-%Y',
+              format: '%d/%m/%Y',
               date: '$createdAt',
             },
           },

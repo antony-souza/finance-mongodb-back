@@ -11,19 +11,19 @@ export class SalesEntity extends Document {
   _id: string;
 
   @Prop({ type: String, required: true })
-  productName: string;
+  productName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Product', required: true })
   product_id: ProductEntity;
 
   @Prop({ type: String, required: true })
-  userName: string;
+  userName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'User', required: true })
   user_id: UserEntity;
 
   @Prop({ type: String, required: true })
-  storeName: string;
+  storeName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: true })
   store_id: StoreEntity;

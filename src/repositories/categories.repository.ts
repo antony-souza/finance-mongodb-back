@@ -28,9 +28,36 @@ export class CategoriesRepository {
   }
 
   async getCategoriesByStore(storeId: string) {
-    return await this.categoriesModel
-      .find({ store: storeId })
-      .select('_id name image_url');
+    return await this.categoriesModel.aggregate([
+      {
+        $match: {
+          store: `${storeId}`,
+        },
+      },
+      {
+        $lookup: {
+          from: 'stores',
+          localField: 'store',
+          foreignField: '_id',
+          as: 'storeData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$storeData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: '$name',
+          image_url: '$image_url',
+          storeName: '$storeData.name',
+        },
+      },
+    ]);
   }
 
   async getCategoryById(id: string) {
