@@ -52,8 +52,8 @@ export class UsersController {
     @UploadedFile() image_url: Express.Multer.File,
   ) {
     return this.usersService.updateUserById({
-      id: id,
       ...updateUserDto,
+      _id: id,
       image_url: image_url,
     });
   }

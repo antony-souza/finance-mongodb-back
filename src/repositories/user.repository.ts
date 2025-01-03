@@ -61,11 +61,20 @@ export class UserRepository {
       .populate('store', 'name');
   }
 
-  async updateUserById(
-    userId: string,
-    data: Partial<UserEntity>,
-  ): Promise<UserEntity> {
-    return await this.userModel.findByIdAndUpdate(userId, data, { new: true });
+  async updateUserById(data: Partial<UserEntity>) {
+    const checkRoles = await this.rolesModel.findById(data.role);
+
+    if (!checkRoles) {
+      throw new NotFoundException('Role not found');
+    }
+
+    return await this.userModel.updateOne(
+      { _id: data._id },
+      {
+        ...data,
+        roleName: checkRoles.name,
+      },
+    );
   }
 
   async deleteUserById(userId: string): Promise<UserEntity> {

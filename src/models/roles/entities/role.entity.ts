@@ -11,7 +11,7 @@ export class RoleEntity {
   name: string;
 
   @Prop({ type: [String], required: false })
-  prermissionsName?: string[];
+  permissionsName?: string[];
 
   @Prop({ type: [mongoose.Types.UUID], ref: 'Permission', required: true })
   permissions: PermissionEntity[];

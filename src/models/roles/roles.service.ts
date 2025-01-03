@@ -9,4 +9,12 @@ export class RolesService {
   createRoles(createRoleDto: CreateRoleDto) {
     return this.rolesRepository.createRoles(createRoleDto);
   }
+
+  getRoles() {
+    return this.rolesRepository.getRoles();
+  }
+
+  getRoleById(roleId: string) {
+    return this.rolesRepository.getRoleById(roleId);
+  }
 }

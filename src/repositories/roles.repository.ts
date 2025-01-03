@@ -42,4 +42,35 @@ export class RolesRepository {
 
     return createdRole;
   }
+
+  async getRoles(): Promise<RoleEntity[]> {
+    return await this.roleModel.aggregate([
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: '$name',
+          permissionsName: '$permissionsName',
+        },
+      },
+    ]);
+  }
+
+  async getRoleById(roleId: string): Promise<RoleEntity[]> {
+    return await this.roleModel.aggregate([
+      {
+        $match: {
+          _id: `${roleId}`,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: '$name',
+          permissionsName: '$permissionsName',
+        },
+      },
+    ]);
+  }
 }

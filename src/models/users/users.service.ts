@@ -48,7 +48,7 @@ export class UsersService {
 
   async updateUserById(updateUserDto: UpdateUserDto) {
     const existingUser = await this.userRepository.getUserById(
-      updateUserDto.id,
+      updateUserDto._id,
     );
 
     if (!existingUser) {
@@ -68,10 +68,10 @@ export class UsersService {
       );
     }
 
-    return this.userRepository.updateUserById(updateUserDto.id, {
+    return this.userRepository.updateUserById({
       ...updateUserDto,
-      image_url: url,
       password: hashPassword,
+      image_url: url,
     });
   }
 
