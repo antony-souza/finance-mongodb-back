@@ -9,9 +9,10 @@ import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 
 export interface IBillingsStore {
   id: string;
-  name: string;
+  productName: string;
   totalBilled: number;
   quantitySold: number;
+  storeName: string;
 }
 
 @Injectable()

@@ -45,7 +45,16 @@ export class SheetsService {
       throw new NotFoundException('Sales not found');
     }
 
-    const data = this.generateBufferSheets(salesData);
+    const mapBillings = salesData.map((sales) => {
+      const data = {
+        Loja: sales.storeName,
+        Produto: sales.productName,
+        Faturamento: formatPrice(sales.totalBilled),
+      };
+      return data;
+    });
+
+    const data = this.generateBufferSheets(mapBillings);
 
     return data;
   }

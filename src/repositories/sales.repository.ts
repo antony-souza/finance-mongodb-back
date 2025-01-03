@@ -101,8 +101,11 @@ export class SalesRepository {
       {
         $group: {
           _id: '$product_id',
-          name: {
+          productName: {
             $first: '$productsData.name',
+          },
+          storeName: {
+            $first: '$storeName',
           },
           quantitySold: {
             $sum: '$quantitySold',
@@ -116,9 +119,10 @@ export class SalesRepository {
         $project: {
           _id: 0,
           product_id: '$_id',
-          name: '$name',
+          productName: '$productName',
           quantitySold: '$quantitySold',
           totalBilled: '$totalBilled',
+          storeName: '$storeName',
         },
       },
     ]);
