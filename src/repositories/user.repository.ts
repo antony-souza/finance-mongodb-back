@@ -62,17 +62,21 @@ export class UserRepository {
   }
 
   async updateUserById(data: Partial<UserEntity>) {
-    const checkRoles = await this.rolesModel.findById(data.role);
+    let checkRole: RoleEntity;
 
-    if (!checkRoles) {
-      throw new NotFoundException('Role not found');
+    if (data.role) {
+      checkRole = await this.rolesModel.findById(data.role);
+
+      if (!checkRole) {
+        throw new NotFoundException('Role not found');
+      }
     }
 
     return await this.userModel.updateOne(
       { _id: data._id },
       {
         ...data,
-        roleName: checkRoles.name,
+        roleName: checkRole ? checkRole.name : undefined,
       },
     );
   }

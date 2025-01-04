@@ -8,6 +8,12 @@ import { Model } from 'mongoose';
 import { PermissionEntity } from 'src/models/permissions/entities/permission.entity';
 import { RoleEntity } from 'src/models/roles/entities/role.entity';
 
+export interface IRoleResponse {
+  id: string;
+  name: string;
+  permissionsName: string[];
+}
+
 @Injectable()
 export class RolesRepository {
   constructor(
@@ -56,7 +62,7 @@ export class RolesRepository {
     ]);
   }
 
-  async getRoleById(roleId: string): Promise<RoleEntity[]> {
+  async getRoleById(roleId: string): Promise<IRoleResponse[]> {
     return await this.roleModel.aggregate([
       {
         $match: {

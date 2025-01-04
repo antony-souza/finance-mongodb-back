@@ -12,8 +12,8 @@ import { RoleSchema } from '../roles/entities/role.entity';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: 'Role', schema: RoleSchema }]),
     MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
+    MongooseModule.forFeature([{ name: 'Role', schema: RoleSchema }]),
   ],
   controllers: [UsersController],
   providers: [
