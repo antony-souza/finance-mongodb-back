@@ -10,7 +10,7 @@ export class AuthRepository {
   ) {}
 
   async authUser(email: string) {
-    return await this.userModel.findOne({ email: email });
+    return await this.userModel.findOne({ email: email }).select('+password');
   }
 
   async findUnique(email: string) {

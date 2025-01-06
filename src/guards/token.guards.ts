@@ -10,7 +10,7 @@ import { JwtAuthService } from 'src/middleware/jwt.service';
 export class TokenGuards implements CanActivate {
   constructor(private readonly jwtService: JwtAuthService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
 
@@ -25,7 +25,8 @@ export class TokenGuards implements CanActivate {
     }
 
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = await this.jwtService.verify(token);
+
       request.user = payload;
       return true;
     } catch {

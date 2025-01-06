@@ -2,8 +2,11 @@ import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { TokenGuards } from 'src/guards/token.guards';
+import { AllowedRoles, RolesGuard } from 'src/guards/role.guard';
+import { RolesEnum } from 'src/utils/enuns/roles';
 
-@UseGuards(TokenGuards)
+@UseGuards(TokenGuards, RolesGuard)
+@AllowedRoles(RolesEnum.Gerente)
 @Controller('/sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}

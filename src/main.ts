@@ -14,6 +14,8 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalGuards();
+
   await app.listen(environment.port);
   new Logger().debug(`Server running on ${environment.port}`, 'Aplication');
 }

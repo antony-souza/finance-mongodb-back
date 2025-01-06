@@ -1,5 +1,6 @@
-export enum Roles {
+export enum RolesEnum {
+  Desenvolvedor = 'Desenvolvedor',
   Gerente = 'Gerente',
-  Vendedor = 'Vendedor',
   Subgerente = 'Subgerente',
+  Vendedor = 'Vendedor',
 }

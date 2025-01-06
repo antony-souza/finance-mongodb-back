@@ -27,6 +27,7 @@ export class AuthService {
 
     const token = await this.jwtService.generateToken({
       id: user._id,
+      roleName: user.roleName,
     });
 
     return {
