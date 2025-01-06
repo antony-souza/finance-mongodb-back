@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Schema({ versionKey: false, timestamps: true })
-export class SalesEntity extends Document {
+export class SalesEntity {
   @Prop({ type: String, default: uuidv4, required: false })
   _id: string;
 

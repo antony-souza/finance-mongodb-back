@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
 import { CreateSaleDto } from 'src/models/sales/dto/create-sale.dto';
+import { UpdateSaleDto } from 'src/models/sales/dto/update-sale.dto';
 import { SalesEntity } from 'src/models/sales/entities/sale.entity';
 import { IBillingsStore } from 'src/models/sales/sales.service';
 import { StoreEntity } from 'src/models/stores/entities/store.entity';
@@ -51,8 +52,8 @@ export class SalesRepository {
     };
   }
 
-  async createSales(createSaleDto: CreateSaleDto): Promise<SalesEntity> {
-    const createSales = await this.salesModel.create(createSaleDto);
+  async createSales(data: CreateSaleDto): Promise<SalesEntity> {
+    const createSales = await this.salesModel.create(data);
 
     if (createSales.store_id) {
       await this.storeModel.findByIdAndUpdate(
@@ -77,15 +78,16 @@ export class SalesRepository {
     return product;
   }
 
-  async updateSales(id: string, data: Partial<SalesEntity>) {
+  async updateSales(id: string, data: UpdateSaleDto) {
     const checkSales = await this.salesModel.findById(id);
-    const checkProduct = await this.productModel.findById(
-      checkSales.product_id,
-    );
 
     if (!checkSales) {
       throw new NotFoundException('Sale not found - Repository');
     }
+
+    const checkProduct = await this.productModel.findById(
+      checkSales.product_id,
+    );
 
     if (!checkProduct) {
       throw new NotFoundException('Product not found - Repository');
@@ -103,6 +105,24 @@ export class SalesRepository {
     if (!sales) {
       throw new NotFoundException('Sale not updated - Repository');
     }
+  }
+
+  async deleteSales(saleId: string) {
+    const checkSales = await this.salesModel.findById(saleId);
+
+    if (!checkSales) {
+      throw new NotFoundException('Sale not found - Repository');
+    }
+
+    const sales = await this.salesModel.findByIdAndDelete(saleId);
+
+    if (!sales) {
+      throw new NotFoundException('Sale not deleted - Repository');
+    }
+
+    await this.storeModel.updateOne({
+      $pull: { sales: saleId },
+    });
   }
 
   async getBillingsByStore(storeId: string): Promise<IBillingsStore[]> {

@@ -6,6 +6,7 @@ import {
   Param,
   UseGuards,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -38,6 +39,11 @@ export class SalesController {
   @Put('/update/:id')
   update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.updateSales(id, updateSaleDto);
+  }
+
+  @Delete('/delete/:id')
+  delete(@Param('id') id: string) {
+    return this.salesService.deleteSales(id);
   }
 
   @AllowedRoles(

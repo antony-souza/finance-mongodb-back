@@ -23,7 +23,7 @@ export class SalesService {
   async create(createSaleDto: CreateSaleDto) {
     const checkProductUserStore =
       await this.salesRepository.findProductsAndUser(
-        createSaleDto.product_id._id,
+        createSaleDto.product_id,
         createSaleDto.user_id,
         createSaleDto.store_id,
       );
@@ -57,6 +57,10 @@ export class SalesService {
 
   async updateSales(id: string, updateSaleDto: UpdateSaleDto) {
     return this.salesRepository.updateSales(id, updateSaleDto);
+  }
+
+  async deleteSales(id: string) {
+    return this.salesRepository.deleteSales(id);
   }
 
   async getBillingsByStoreForCharts(store_id: string) {
