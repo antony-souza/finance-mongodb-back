@@ -49,9 +49,16 @@ export class ProductsService {
       url = await this.uploadService.upload(updateUserDto.image_url);
     }
 
+    let stock = findProduct.stock;
+
+    if (updateUserDto.stock) {
+      stock = stock + updateUserDto.stock;
+    }
+
     return this.productRepository.updateProduct(updateUserDto._id, {
       ...updateUserDto,
       image_url: url,
+      stock: stock,
     });
   }
 }
