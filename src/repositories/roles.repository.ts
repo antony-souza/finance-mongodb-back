@@ -37,14 +37,10 @@ export class RolesRepository {
       throw new NotFoundException('Permission does not exist');
     }
 
-    const createdRole = await this.roleModel.create(roles);
-
-    if (createdRole.permissions) {
-      await this.roleModel.updateMany({
-        permissions: createdRole.permissions,
-        prermissionsName: checkPermissions.name,
-      });
-    }
+    const createdRole = await this.roleModel.create({
+      ...roles,
+      permissionsName: checkPermissions.name,
+    });
 
     return createdRole;
   }
