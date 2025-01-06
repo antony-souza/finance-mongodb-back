@@ -6,6 +6,7 @@ import {
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/repositories/sales.repository';
 import { formatPrice } from 'src/utils/formatPrice/formatPricer';
+import { UpdateSaleDto } from './dto/update-sale.dto';
 
 export interface IBillingsStore {
   id: string;
@@ -22,7 +23,7 @@ export class SalesService {
   async create(createSaleDto: CreateSaleDto) {
     const checkProductUserStore =
       await this.salesRepository.findProductsAndUser(
-        createSaleDto.product_id,
+        createSaleDto.product_id._id,
         createSaleDto.user_id,
         createSaleDto.store_id,
       );
@@ -52,6 +53,10 @@ export class SalesService {
     });
 
     return createSales;
+  }
+
+  async updateSales(id: string, updateSaleDto: UpdateSaleDto) {
+    return this.salesRepository.updateSales(id, updateSaleDto);
   }
 
   async getBillingsByStoreForCharts(store_id: string) {

@@ -77,6 +77,34 @@ export class SalesRepository {
     return product;
   }
 
+  async updateSales(id: string, data: Partial<SalesEntity>) {
+    const checkSales = await this.salesModel.findById(id);
+    const checkProduct = await this.productModel.findById(
+      checkSales.product_id,
+    );
+
+    if (!checkSales) {
+      throw new NotFoundException('Sale not found - Repository');
+    }
+
+    if (!checkProduct) {
+      throw new NotFoundException('Product not found - Repository');
+    }
+
+    const sales = await this.salesModel.updateOne(
+      { _id: checkSales._id },
+      {
+        ...data,
+        totalBilled: data.quantitySold * checkProduct.price,
+      },
+      { new: true },
+    );
+
+    if (!sales) {
+      throw new NotFoundException('Sale not updated - Repository');
+    }
+  }
+
   async getBillingsByStore(storeId: string): Promise<IBillingsStore[]> {
     return await this.salesModel.aggregate([
       {
@@ -185,6 +213,7 @@ export class SalesRepository {
       {
         $project: {
           _id: 0,
+          id: '$_id',
           productId: '$product_id',
           productName: '$productsData.name',
           productImg: '$productsData.image_url',

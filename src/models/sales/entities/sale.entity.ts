@@ -10,19 +10,19 @@ export class SalesEntity extends Document {
   @Prop({ type: String, default: uuidv4, required: false })
   _id: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   productName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Product', required: true })
   product_id: ProductEntity;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   userName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'User', required: true })
   user_id: UserEntity;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   storeName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: true })
