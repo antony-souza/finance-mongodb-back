@@ -91,7 +91,6 @@ export class SalesRepository {
 
   async updateSales(id: string, data: UpdateSaleDto) {
     const checkSales = await this.salesModel.findById(id);
-
     if (!checkSales) {
       throw new NotFoundException('Sale not found - Repository');
     }
@@ -99,13 +98,29 @@ export class SalesRepository {
     const checkProduct = await this.productModel.findById(
       checkSales.product_id,
     );
-
     if (!checkProduct) {
       throw new NotFoundException('Product not found - Repository');
     }
 
-    const sales = await this.salesModel.updateOne(
-      { _id: checkSales._id },
+    const updatedStockProduct = await this.productModel.findOneAndUpdate(
+      {
+        _id: checkProduct._id,
+        stock: { $gte: data.quantitySold - checkSales.quantitySold },
+      },
+      {
+        $inc: { stock: checkSales.quantitySold - data.quantitySold },
+      },
+      { new: true },
+    );
+
+    if (!updatedStockProduct) {
+      throw new ConflictException(
+        'Insufficient stock to update the sale - Repository',
+      );
+    }
+
+    const updatedSale = await this.salesModel.findByIdAndUpdate(
+      id,
       {
         ...data,
         totalBilled: data.quantitySold * checkProduct.price,
@@ -113,16 +128,11 @@ export class SalesRepository {
       { new: true },
     );
 
-    if (!sales) {
+    if (!updatedSale) {
       throw new NotFoundException('Sale not updated - Repository');
     }
 
-    this.productModel.updateOne(
-      { _id: checkProduct._id, stock: { $gte: data.quantitySold } },
-      {
-        $inc: { stock: -data.quantitySold },
-      },
-    );
+    return updatedSale;
   }
 
   async deleteSales(saleId: string) {
