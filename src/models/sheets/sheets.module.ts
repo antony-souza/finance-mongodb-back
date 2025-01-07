@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SheetsService } from './sheets.service';
 import { SheetsController } from './sheets.controller';
-import { ProductRepository } from 'src/repositories/product.repository';
+import { ProductRepository } from 'src/models/products/product.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductSchema } from '../products/entities/product.entity';
 import { StoreSchema } from '../stores/entities/store.entity';
-import { SalesRepository } from 'src/repositories/sales.repository';
+import { SalesRepository } from 'src/models/sales/sales.repository';
 import { SalesSchema } from '../sales/entities/sale.entity';
 import { UserSchema } from '../users/entities/user.entity';
 

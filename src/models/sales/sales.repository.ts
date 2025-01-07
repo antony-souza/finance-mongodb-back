@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ProductEntity } from 'src/models/products/entities/product.entity';
@@ -53,7 +57,24 @@ export class SalesRepository {
   }
 
   async createSales(data: CreateSaleDto): Promise<SalesEntity> {
+    const product = await this.productModel.findOne({
+      _id: data.product_id,
+      stock: { $gte: data.quantitySold },
+    });
+
+    if (!product) {
+      throw new ConflictException('Product out of stock or not found');
+    }
+
     const createSales = await this.salesModel.create(data);
+
+    await this.productModel.findByIdAndUpdate(
+      data.product_id,
+      {
+        $inc: { stock: -data.quantitySold },
+      },
+      { new: true },
+    );
 
     if (createSales.store_id) {
       await this.storeModel.findByIdAndUpdate(
@@ -64,18 +85,8 @@ export class SalesRepository {
         { new: true },
       );
     }
-    return createSales;
-  }
 
-  async updateStock(productId: string, quantitySold: number) {
-    const product = await this.productModel.findByIdAndUpdate(
-      productId,
-      {
-        $inc: { stock: -quantitySold },
-      },
-      { new: true },
-    );
-    return product;
+    return createSales;
   }
 
   async updateSales(id: string, data: UpdateSaleDto) {
@@ -105,6 +116,13 @@ export class SalesRepository {
     if (!sales) {
       throw new NotFoundException('Sale not updated - Repository');
     }
+
+    this.productModel.updateOne(
+      { _id: checkProduct._id, stock: { $gte: data.quantitySold } },
+      {
+        $inc: { stock: -data.quantitySold },
+      },
+    );
   }
 
   async deleteSales(saleId: string) {
@@ -112,6 +130,15 @@ export class SalesRepository {
 
     if (!checkSales) {
       throw new NotFoundException('Sale not found - Repository');
+    }
+
+    const stockProduct = await this.productModel.findOneAndUpdate(
+      { _id: checkSales.product_id, stock: { $gte: checkSales.quantitySold } },
+      { $inc: { stock: checkSales.quantitySold } },
+    );
+
+    if (!stockProduct) {
+      throw new NotFoundException('Product not found - Repository');
     }
 
     const sales = await this.salesModel.findByIdAndDelete(saleId);

@@ -1,10 +1,6 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
-import { SalesRepository } from 'src/repositories/sales.repository';
+import { SalesRepository } from 'src/models/sales/sales.repository';
 import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 
@@ -32,17 +28,8 @@ export class SalesService {
       throw new NotFoundException('Product, User or Store not found - Service');
     }
 
-    if (checkProductUserStore.checkProduct.stock < createSaleDto.quantitySold) {
-      throw new ConflictException('Product out of stock');
-    }
-
     const totalBilled =
       createSaleDto.quantitySold * checkProductUserStore.checkProduct.price;
-
-    await this.salesRepository.updateStock(
-      checkProductUserStore.checkProduct._id,
-      createSaleDto.quantitySold,
-    );
 
     const createSales = await this.salesRepository.createSales({
       ...createSaleDto,

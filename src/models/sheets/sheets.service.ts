@@ -1,7 +1,7 @@
 import * as xlsx from 'xlsx';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProductRepository } from 'src/repositories/product.repository';
-import { SalesRepository } from 'src/repositories/sales.repository';
+import { ProductRepository } from 'src/models/products/product.repository';
+import { SalesRepository } from 'src/models/sales/sales.repository';
 import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 
 @Injectable()

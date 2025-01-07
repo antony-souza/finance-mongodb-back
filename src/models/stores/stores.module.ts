@@ -3,7 +3,7 @@ import { StoresService } from './stores.service';
 import { StoresController } from './stores.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StoreSchema } from './entities/store.entity';
-import { StoreRespository } from 'src/repositories/store.repository';
+import { StoreRespository } from 'src/models/stores/store.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 
 @Module({

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CategoriesRepository } from 'src/repositories/categories.repository';
+import { CategoriesRepository } from 'src/models/categories/categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import { UpdateCategoryDto } from './dto/update-category.dto';

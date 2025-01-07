@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRepository } from 'src/repositories/user.repository';
+import { UserRepository } from 'src/models/users/user.repository';
 import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import { UpdateUserDto } from './dto/update-user.dto';

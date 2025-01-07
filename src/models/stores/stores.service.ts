@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
-import { StoreRespository } from 'src/repositories/store.repository';
+import { StoreRespository } from 'src/models/stores/store.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 
 @Injectable()

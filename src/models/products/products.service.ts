@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductRepository } from 'src/repositories/product.repository';
+import { ProductRepository } from 'src/models/products/product.repository';
 import UploadFileFactoryService from 'src/utils/uploads/upload-file.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 
