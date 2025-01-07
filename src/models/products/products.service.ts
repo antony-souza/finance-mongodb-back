@@ -61,4 +61,8 @@ export class ProductsService {
       stock: stock,
     });
   }
+
+  async delete(id: string) {
+    return this.productRepository.deleteProduct(id);
+  }
 }

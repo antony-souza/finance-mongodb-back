@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UseGuards,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -54,5 +55,10 @@ export class ProductsController {
       _id: id,
       image_url: image_url,
     });
+  }
+
+  @Delete('/delete/:id')
+  delete(@Param('id') id: string) {
+    return this.productsService.delete(id);
   }
 }

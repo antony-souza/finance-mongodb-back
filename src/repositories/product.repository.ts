@@ -98,7 +98,7 @@ export class ProductRepository {
   }
 
   async deleteProduct(id: string) {
-    const deleteProduct = await this.productModel.findByIdAndDelete(id);
+    const deleteProduct = await this.productModel.findById(id);
 
     if (deleteProduct.store) {
       this.storeModel.findByIdAndUpdate(
@@ -107,5 +107,7 @@ export class ProductRepository {
         { new: true },
       );
     }
+
+    return await this.productModel.deleteOne({ _id: id });
   }
 }
