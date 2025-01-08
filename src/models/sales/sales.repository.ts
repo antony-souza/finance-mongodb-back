@@ -299,7 +299,7 @@ export class SalesRepository {
   }
 
   async getTopSellingProducts(storeId: string) {
-    const topSellingProducts = await this.salesModel.aggregate([
+    return await this.salesModel.aggregate([
       {
         $match: {
           store_id: `${storeId}`,
@@ -329,7 +329,5 @@ export class SalesRepository {
         },
       },
     ]);
-
-    return topSellingProducts;
   }
 }
