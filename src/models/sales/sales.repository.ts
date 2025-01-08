@@ -297,4 +297,39 @@ export class SalesRepository {
       },
     ]);
   }
+
+  async getTopSellingProducts(storeId: string) {
+    const topSellingProducts = await this.salesModel.aggregate([
+      {
+        $match: {
+          store_id: `${storeId}`,
+        },
+      },
+      {
+        $group: {
+          _id: '$product_id',
+          quantitySold: {
+            $sum: '$quantitySold',
+          },
+          totalBilled: {
+            $sum: '$totalBilled',
+          },
+          productName: {
+            $first: '$productName',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          productId: '$_id',
+          productName: '$productName',
+          quantitySold: '$quantitySold',
+          totalBilled: '$totalBilled',
+        },
+      },
+    ]);
+
+    return topSellingProducts;
+  }
 }
