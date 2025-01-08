@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CategoriesEntity } from 'src/models/categories/entities/category.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Categories } from 'src/models/categories/entities/category.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 
 @Injectable()
 export class CategoriesRepository {
   constructor(
-    @InjectModel('Categories')
-    private readonly categoriesModel: Model<CategoriesEntity>,
-    @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
+    @InjectModel(Categories.name)
+    private readonly categoriesModel: Model<Categories>,
+    @InjectModel(Store.name) private readonly storeModel: Model<Store>,
   ) {}
 
-  async createCategory(categoryData: CategoriesEntity) {
+  async createCategory(categoryData: Categories) {
     const createCategory = await this.categoriesModel.create(categoryData);
 
     if (createCategory.store) {
@@ -66,7 +66,7 @@ export class CategoriesRepository {
       .select('_id name image_url store');
   }
 
-  async updateCategory(id: string, categoryData: Partial<CategoriesEntity>) {
+  async updateCategory(id: string, categoryData: Partial<Categories>) {
     return await this.categoriesModel.findByIdAndUpdate(id, categoryData, {
       new: true,
     });

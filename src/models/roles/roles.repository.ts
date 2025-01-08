@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PermissionEntity } from 'src/models/permissions/entities/permission.entity';
-import { RoleEntity } from 'src/models/roles/entities/role.entity';
+import { Permission } from 'src/models/permissions/entities/permission.entity';
+import { Role } from 'src/models/roles/entities/role.entity';
 
 export interface IRoleResponse {
   id: string;
@@ -17,12 +17,12 @@ export interface IRoleResponse {
 @Injectable()
 export class RolesRepository {
   constructor(
-    @InjectModel('Role') private readonly roleModel: Model<RoleEntity>,
-    @InjectModel('Permission')
-    private readonly permissionModel: Model<PermissionEntity>,
+    @InjectModel(Role.name) private readonly roleModel: Model<Role>,
+    @InjectModel(Permission.name)
+    private readonly permissionModel: Model<Permission>,
   ) {}
 
-  async createRoles(roles: RoleEntity): Promise<RoleEntity> {
+  async createRoles(roles: Role): Promise<Role> {
     const checkRoles = await this.roleModel.findOne({ name: roles.name });
 
     const checkPermissions = await this.permissionModel.findOne({
@@ -45,7 +45,7 @@ export class RolesRepository {
     return createdRole;
   }
 
-  async getRoles(): Promise<RoleEntity[]> {
+  async getRoles(): Promise<Role[]> {
     return await this.roleModel.aggregate([
       {
         $project: {

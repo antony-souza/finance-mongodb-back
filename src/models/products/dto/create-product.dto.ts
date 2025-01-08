@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { CategoriesEntity } from 'src/models/categories/entities/category.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Categories } from 'src/models/categories/entities/category.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 
 export class CreateProductDto {
   @IsOptional()
@@ -25,8 +25,8 @@ export class CreateProductDto {
   image_url?: Express.Multer.File;
 
   @IsString()
-  store: StoreEntity;
+  store: Store;
 
   @IsString()
-  categories: CategoriesEntity;
+  categories: Categories;
 }

@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProductEntity } from 'src/models/products/entities/product.entity';
+import { Product } from 'src/models/products/entities/product.entity';
 import { CreateSaleDto } from 'src/models/sales/dto/create-sale.dto';
 import { UpdateSaleDto } from 'src/models/sales/dto/update-sale.dto';
-import { SalesEntity } from 'src/models/sales/entities/sale.entity';
+import { Sales } from 'src/models/sales/entities/sale.entity';
 import { IBillingsStore } from 'src/models/sales/sales.service';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 export interface ISalesResponse {
   productId: string;
@@ -30,10 +30,10 @@ export interface ISalesResponse {
 @Injectable()
 export class SalesRepository {
   constructor(
-    @InjectModel('Sale') private readonly salesModel: Model<SalesEntity>,
-    @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
-    @InjectModel('User') private readonly userModel: Model<UserEntity>,
-    @InjectModel('Product') private readonly productModel: Model<ProductEntity>,
+    @InjectModel(Sales.name) private readonly salesModel: Model<Sales>,
+    @InjectModel(Store.name) private readonly storeModel: Model<Store>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Product.name) private readonly productModel: Model<Product>,
   ) {}
 
   async findProductsAndUser(productId: string, userId, storeId) {
@@ -56,7 +56,7 @@ export class SalesRepository {
     };
   }
 
-  async createSales(data: CreateSaleDto): Promise<SalesEntity> {
+  async createSales(data: CreateSaleDto): Promise<Sales> {
     const product = await this.productModel.findOne({
       _id: data.product_id,
       stock: { $gte: data.quantitySold },

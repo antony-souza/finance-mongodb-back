@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { CategoriesEntity } from 'src/models/categories/entities/category.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Categories } from 'src/models/categories/entities/category.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 import { v4 as uuidv4 } from 'uuid';
 @Schema({ versionKey: false, timestamps: true })
-export class ProductEntity {
+export class Product {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;
 
@@ -24,10 +24,10 @@ export class ProductEntity {
   image_url: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Categories', required: true })
-  categories: CategoriesEntity;
+  categories: Categories;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: true })
-  store: StoreEntity;
+  store: Store;
 }
 
-export const ProductSchema = SchemaFactory.createForClass(ProductEntity);
+export const ProductSchema = SchemaFactory.createForClass(Product);

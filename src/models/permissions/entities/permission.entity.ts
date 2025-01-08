@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
 @Schema({ timestamps: true, versionKey: false })
-export class PermissionEntity {
+export class Permission {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;
 
@@ -12,4 +12,4 @@ export class PermissionEntity {
   description: string;
 }
 
-export const PermissionSchema = SchemaFactory.createForClass(PermissionEntity);
+export const PermissionSchema = SchemaFactory.createForClass(Permission);

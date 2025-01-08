@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 
 export class CreateCategoryDto {
   @IsString()
@@ -13,5 +13,5 @@ export class CreateCategoryDto {
   image_url?: Express.Multer.File;
 
   @IsString()
-  store: StoreEntity;
+  store: Store;
 }

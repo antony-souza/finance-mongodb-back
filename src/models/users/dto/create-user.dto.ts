@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
-import { RoleEntity } from 'src/models/roles/entities/role.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Role } from 'src/models/roles/entities/role.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 
 export class CreateUserDto {
   @IsString()
@@ -24,12 +24,12 @@ export class CreateUserDto {
   storeName?: string;
 
   @IsOptional()
-  store: StoreEntity;
+  store: Store;
 
   @IsOptional()
   @IsString()
   roleName?: string;
 
   @IsOptional()
-  role: RoleEntity;
+  role: Role;
 }

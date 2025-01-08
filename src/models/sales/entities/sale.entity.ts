@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { ProductEntity } from 'src/models/products/entities/product.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { Product } from 'src/models/products/entities/product.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
+import { User } from 'src/models/users/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Schema({ versionKey: false, timestamps: true })
-export class SalesEntity {
+export class Sales {
   @Prop({ type: String, default: uuidv4, required: false })
   _id: string;
 
@@ -14,19 +14,19 @@ export class SalesEntity {
   productName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Product', required: true })
-  product_id: ProductEntity;
+  product_id: Product;
 
   @Prop({ type: String, required: false })
   userName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'User', required: true })
-  user_id: UserEntity;
+  user_id: User;
 
   @Prop({ type: String, required: false })
   storeName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: true })
-  store_id: StoreEntity;
+  store_id: Store;
 
   @Prop({ type: Number, required: false })
   totalBilled?: number;
@@ -35,4 +35,4 @@ export class SalesEntity {
   quantitySold: number;
 }
 
-export const SalesSchema = SchemaFactory.createForClass(SalesEntity);
+export const SalesSchema = SchemaFactory.createForClass(Sales);

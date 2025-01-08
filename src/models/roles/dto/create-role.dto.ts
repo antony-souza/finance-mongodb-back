@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { PermissionEntity } from 'src/models/permissions/entities/permission.entity';
+import { Permission } from 'src/models/permissions/entities/permission.entity';
 
 export class CreateRoleDto {
   @IsString()
@@ -14,5 +14,5 @@ export class CreateRoleDto {
   prermissionsName?: string[];
 
   @IsString()
-  permissions: PermissionEntity[];
+  permissions: Permission[];
 }

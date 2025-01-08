@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { RoleEntity } from 'src/models/roles/entities/role.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
+import { Role } from 'src/models/roles/entities/role.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
 import { v4 as uuidv4 } from 'uuid';
 @Schema({ versionKey: false, timestamps: true })
-export class UserEntity {
+export class User {
   @Prop({ type: String, required: false, default: uuidv4 })
   _id?: string;
 
@@ -27,7 +27,7 @@ export class UserEntity {
   updatedAt?: Date;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Store', required: false })
-  store: StoreEntity;
+  store: Store;
 
   @Prop({ type: String, required: false })
   storeName?: string;
@@ -36,7 +36,7 @@ export class UserEntity {
   roleName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Role', required: true })
-  role: RoleEntity;
+  role: Role;
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserEntity);
+export const UserSchema = SchemaFactory.createForClass(User);

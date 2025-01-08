@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { RoleEntity } from 'src/models/roles/entities/role.entity';
-import { StoreEntity } from 'src/models/stores/entities/store.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { Role } from 'src/models/roles/entities/role.entity';
+import { Store } from 'src/models/stores/entities/store.entity';
+import { User } from 'src/models/users/entities/user.entity';
 
 @Injectable()
 export class UserRepository {
   constructor(
-    @InjectModel('User') private readonly userModel: Model<UserEntity>,
-    @InjectModel('Store') private readonly storeModel: Model<StoreEntity>,
-    @InjectModel('Role') private readonly rolesModel: Model<RoleEntity>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Store.name) private readonly storeModel: Model<Store>,
+    @InjectModel(Role.name) private readonly rolesModel: Model<Role>,
   ) {}
 
-  async createUser(userData: UserEntity): Promise<UserEntity> {
+  async createUser(userData: User): Promise<User> {
     const [checkRoles, checkStores] = await Promise.all([
       await this.rolesModel.findById(userData.role),
       await this.storeModel.findById(userData.store),
@@ -54,15 +54,15 @@ export class UserRepository {
       .populate('store', 'name');
   }
 
-  async getUserById(userId: string): Promise<UserEntity> {
+  async getUserById(userId: string): Promise<User> {
     return await this.userModel
       .findById(userId)
       .select('_id name email image_url')
       .populate('store', 'name');
   }
 
-  async updateUserById(data: Partial<UserEntity>) {
-    let checkRole: RoleEntity;
+  async updateUserById(data: Partial<User>) {
+    let checkRole: Role;
 
     if (data.role) {
       checkRole = await this.rolesModel.findById(data.role);
@@ -81,7 +81,7 @@ export class UserRepository {
     );
   }
 
-  async deleteUserById(userId: string): Promise<UserEntity> {
+  async deleteUserById(userId: string): Promise<User> {
     const deleteUser = await this.userModel.findByIdAndDelete(userId);
 
     if (deleteUser.store) {

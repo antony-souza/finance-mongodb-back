@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { PermissionEntity } from 'src/models/permissions/entities/permission.entity';
+import { Permission } from 'src/models/permissions/entities/permission.entity';
 import { v4 as uuidv4 } from 'uuid';
 @Schema({ versionKey: false, timestamps: true })
-export class RoleEntity {
+export class Role {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;
 
@@ -14,7 +14,7 @@ export class RoleEntity {
   permissionsName?: string[];
 
   @Prop({ type: [mongoose.Types.UUID], ref: 'Permission', required: true })
-  permissions: PermissionEntity[];
+  permissions: Permission[];
 }
 
-export const RoleSchema = SchemaFactory.createForClass(RoleEntity);
+export const RoleSchema = SchemaFactory.createForClass(Role);
