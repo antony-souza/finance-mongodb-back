@@ -298,11 +298,19 @@ export class SalesRepository {
     ]);
   }
 
-  async getTopSellingProducts(storeId: string) {
+  async getTopSellingProductsByDate(
+    storeId: string,
+    startDate: Date,
+    endDate: Date,
+  ) {
     return await this.salesModel.aggregate([
       {
         $match: {
           store_id: `${storeId}`,
+          createdAt: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`,
+          },
         },
       },
       {
