@@ -339,14 +339,18 @@ export class SalesRepository {
     ]);
   }
 
-  async getSalesByDate(storeId: string, startDate: Date, endDate: Date) {
+  async getSalesByDate(
+    storeId: string,
+    startDate: string,
+    endDate: string,
+  ): Promise<ISalesResponse[]> {
     return await this.salesModel.aggregate([
       {
         $match: {
           store_id: `${storeId}`,
           createdAt: {
-            $gte: `${startDate}`,
-            $lte: `${endDate}`,
+            $gte: new Date(`${startDate}T00:00:00Z`),
+            $lte: new Date(`${endDate}T23:59:59Z`),
           },
         },
       },

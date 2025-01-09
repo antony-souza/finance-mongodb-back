@@ -7,6 +7,7 @@ import {
   UseGuards,
   Put,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -14,6 +15,7 @@ import { TokenGuards } from 'src/guards/token.guards';
 import { AllowedRoles, RolesGuard } from 'src/guards/role.guard';
 import { RolesEnum } from 'src/utils/enuns/roles';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(TokenGuards, RolesGuard)
 @Controller('/sales')
@@ -60,5 +62,20 @@ export class SalesController {
   @Get('/store/:store_id')
   findAllSalesByStore(@Param('store_id') store_id: string) {
     return this.salesService.getAllSalesByStore(store_id);
+  }
+
+  @AllowedRoles(
+    RolesEnum.Desenvolvedor,
+    RolesEnum.Gerente,
+    RolesEnum.Subgerente,
+  )
+  @Get('/all/date')
+  @UseInterceptors(FileInterceptor(''))
+  findAllSalesByDate(
+    @Body('storeId') storeId: string,
+    @Body('startDate') startDate: string,
+    @Body('endDate') endDate: string,
+  ) {
+    return this.salesService.getAllSalesByDate(storeId, startDate, endDate);
   }
 }

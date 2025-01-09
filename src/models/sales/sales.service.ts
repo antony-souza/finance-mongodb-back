@@ -62,4 +62,21 @@ export class SalesService {
       totalBilled: formatPrice(sale.totalBilled),
     }));
   }
+
+  async getAllSalesByDate(storeId: string, startDate: string, endDate: string) {
+    const sales = await this.salesRepository.getSalesByDate(
+      storeId,
+      startDate,
+      endDate,
+    );
+
+    if (!sales) {
+      throw new NotFoundException('Sales not found');
+    }
+
+    return sales.map((sale) => ({
+      ...sale,
+      totalBilled: formatPrice(sale.totalBilled),
+    }));
+  }
 }
