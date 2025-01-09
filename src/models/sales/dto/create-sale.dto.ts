@@ -33,4 +33,10 @@ export class CreateSaleDto {
 
   @IsNumber()
   quantitySold: number;
+
+  @IsOptional()
+  startDate?: string;
+
+  @IsOptional()
+  endDate?: string;
 }

@@ -69,13 +69,9 @@ export class SalesController {
     RolesEnum.Gerente,
     RolesEnum.Subgerente,
   )
-  @Get('/all/date')
+  @Post('/all/date')
   @UseInterceptors(FileInterceptor(''))
-  findAllSalesByDate(
-    @Body('storeId') storeId: string,
-    @Body('startDate') startDate: string,
-    @Body('endDate') endDate: string,
-  ) {
-    return this.salesService.getAllSalesByDate(storeId, startDate, endDate);
+  findAllSalesByDate(@Body() updateSalesDto: UpdateSaleDto) {
+    return this.salesService.getAllSalesByDate(updateSalesDto);
   }
 }

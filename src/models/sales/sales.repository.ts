@@ -355,10 +355,39 @@ export class SalesRepository {
         },
       },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'usersData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$usersData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'product_id',
+          foreignField: '_id',
+          as: 'productsData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$productsData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
         $project: {
           _id: 0,
           productId: '$product_id',
           productName: '$productName',
+          productImg: '$productsData.image_url',
           quantitySold: '$quantitySold',
           date: {
             $dateToString: {
@@ -376,7 +405,7 @@ export class SalesRepository {
           totalBilled: '$totalBilled',
           userName: '$userName',
           userRole: '$userRole',
-          userImg: '$userImg',
+          userImg: '$usersData.image_url',
           storeName: '$storeName',
         },
       },

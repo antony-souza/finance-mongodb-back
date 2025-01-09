@@ -63,16 +63,12 @@ export class SalesService {
     }));
   }
 
-  async getAllSalesByDate(storeId: string, startDate: string, endDate: string) {
+  async getAllSalesByDate(updateSaleDto: UpdateSaleDto) {
     const sales = await this.salesRepository.getSalesByDate(
-      storeId,
-      startDate,
-      endDate,
+      updateSaleDto.store_id,
+      updateSaleDto.startDate,
+      updateSaleDto.endDate,
     );
-
-    if (!sales) {
-      throw new NotFoundException('Sales not found');
-    }
 
     return sales.map((sale) => ({
       ...sale,
