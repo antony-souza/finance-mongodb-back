@@ -338,4 +338,44 @@ export class SalesRepository {
       },
     ]);
   }
+
+  async getSalesByDate(storeId: string, startDate: Date, endDate: Date) {
+    return await this.salesModel.aggregate([
+      {
+        $match: {
+          store_id: `${storeId}`,
+          createdAt: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`,
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          productId: '$product_id',
+          productName: '$productName',
+          quantitySold: '$quantitySold',
+          date: {
+            $dateToString: {
+              format: '%d/%m/%Y',
+              date: '$createdAt',
+            },
+          },
+          hour: {
+            $dateToString: {
+              format: '%H:%M:%S',
+              date: '$createdAt',
+              timezone: 'America/Sao_Paulo',
+            },
+          },
+          totalBilled: '$totalBilled',
+          userName: '$userName',
+          userRole: '$userRole',
+          userImg: '$userImg',
+          storeName: '$storeName',
+        },
+      },
+    ]);
+  }
 }
