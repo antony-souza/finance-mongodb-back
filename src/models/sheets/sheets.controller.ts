@@ -6,19 +6,6 @@ import { Response } from 'express';
 export class SheetsController {
   constructor(private readonly sheetsService: SheetsService) {}
 
-  @Get('/generate-all-products/:id')
-  async generateProductsSheets(@Param('id') id: string, @Res() res: Response) {
-    const data = await this.sheetsService.generateProductSheets(id);
-
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    );
-    res.setHeader('Content-Disposition', 'attachment');
-
-    return res.send(data);
-  }
-
   @Get('/generate-billing-sheet/:id')
   async generateBillingSheetByStore(
     @Param('id') id: string,

@@ -26,16 +26,24 @@ export class SheetsService {
     return binarySheets;
   }
 
-  async generateProductSheets(id: string) {
-    const productsData = await this.productRepository.getAllProductsByStore(id);
+  async genericSheetsSales(data: any) {
+    const mapSalesData = data.map((sales) => {
+      const sheetTable = {
+        Loja: sales.storeName,
+        Produto: sales.productName,
+        Quantidade: sales.quantitySold,
+        Faturamento: sales.totalBilled,
+        Vendedor: sales.userName,
+        Cargo: sales.userRole,
+        Data: sales.date,
+        Horário: sales.hour,
+      };
+      return sheetTable;
+    });
 
-    if (!productsData || productsData.length === 0) {
-      throw new NotFoundException('Products not found');
-    }
+    const response = this.generateBufferSheets(mapSalesData);
 
-    const data = this.generateBufferSheets(productsData);
-
-    return data;
+    return response;
   }
 
   async generateBillingSheetByStore(id: string) {
@@ -59,28 +67,14 @@ export class SheetsService {
     return data;
   }
 
-  async generateSalesSheetByStore(storeId: string) {
-    const salesData = await this.salesRepository.findAllSalesByStore(storeId);
+  async generateSalesSheetByStore(id: string) {
+    const salesData = await this.salesRepository.findAllSalesByStore(id);
 
     if (!salesData || salesData.length === 0) {
       throw new NotFoundException('Sales not found');
     }
 
-    const mapSalesData = salesData.map((sales) => {
-      const data = {
-        Loja: sales.storeName,
-        Produto: sales.productName,
-        Quantidade: sales.quantitySold,
-        Faturamento: formatPrice(sales.totalBilled),
-        Vendedor: sales.userName,
-        Cargo: sales.userRole,
-        Data: sales.date,
-        Horário: sales.hour,
-      };
-      return data;
-    });
-
-    const data = this.generateBufferSheets(mapSalesData);
+    const data = this.genericSheetsSales(salesData);
 
     return data;
   }
