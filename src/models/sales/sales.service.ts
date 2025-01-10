@@ -79,4 +79,13 @@ export class SalesService {
       totalBilled: formatPrice(sale.totalBilled),
     }));
   }
+
+  async getSalesByUser(storeId: string) {
+    const sales = await this.salesRepository.getSalesTopEmployees(storeId);
+
+    return sales.map((sale) => ({
+      ...sale,
+      totalBilled: formatPrice(sale.totalBilled),
+    }));
+  }
 }

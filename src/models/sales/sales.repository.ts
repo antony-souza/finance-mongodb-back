@@ -346,4 +346,50 @@ export class SalesRepository {
       },
     ]);
   }
+
+  getSalesTopEmployees(storeId: string) {
+    return this.salesModel.aggregate([
+      {
+        $match: {
+          store_id: `${storeId}`,
+        },
+      },
+      {
+        $group: {
+          _id: '$user_id',
+          totalBilled: {
+            $sum: '$totalBilled',
+          },
+          quantitySold: {
+            $sum: '$quantitySold',
+          },
+          userName: {
+            $first: '$userName',
+          },
+          userRole: {
+            $first: '$userRole',
+          },
+          userImg: {
+            $first: '$userImg',
+          },
+        },
+      },
+      {
+        $sort: {
+          totalBilled: -1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          userName: '$userName',
+          userRole: '$userRole',
+          userImg: '$userImg',
+          totalBilled: '$totalBilled',
+          quantitySold: '$quantitySold',
+        },
+      },
+    ]);
+  }
 }

@@ -26,6 +26,7 @@ export class SalesController {
     RolesEnum.Desenvolvedor,
     RolesEnum.Gerente,
     RolesEnum.Subgerente,
+    RolesEnum.Vendedor,
   )
   @Post('/create')
   create(@Body() createSaleDto: CreateSaleDto) {
@@ -73,5 +74,15 @@ export class SalesController {
   @UseInterceptors(FileInterceptor(''))
   findAllSalesByDate(@Body() updateSalesDto: UpdateSaleDto) {
     return this.salesService.getAllSalesByDate(updateSalesDto);
+  }
+
+  @AllowedRoles(
+    RolesEnum.Desenvolvedor,
+    RolesEnum.Gerente,
+    RolesEnum.Subgerente,
+  )
+  @Get('/top-user/:store_id')
+  findAllSalesByUser(@Param('store_id') store_id: string) {
+    return this.salesService.getSalesByUser(store_id);
   }
 }
