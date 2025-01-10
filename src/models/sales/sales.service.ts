@@ -33,9 +33,13 @@ export class SalesService {
 
     const createSales = await this.salesRepository.createSales({
       ...createSaleDto,
+      productImg: checkProductUserStore.checkProduct.image_url,
       productName: checkProductUserStore.checkProduct.name,
+      storeImg: checkProductUserStore.checkStore.image_url,
       storeName: checkProductUserStore.checkStore.name,
+      userImg: checkProductUserStore.checkUser.image_url,
       userName: checkProductUserStore.checkUser.name,
+      userRole: checkProductUserStore.checkUser.roleName,
       totalBilled: totalBilled,
     });
 

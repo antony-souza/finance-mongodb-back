@@ -7,6 +7,10 @@ export class CreateSaleDto {
 
   @IsString()
   @IsOptional()
+  productImg?: string;
+
+  @IsString()
+  @IsOptional()
   productName?: string;
 
   @IsString()
@@ -17,7 +21,19 @@ export class CreateSaleDto {
   userName?: string;
 
   @IsString()
+  @IsOptional()
+  userImg?: string;
+
+  @IsString()
+  @IsOptional()
+  userRole?: string;
+
+  @IsString()
   user_id: string;
+
+  @IsString()
+  @IsOptional()
+  storeImg?: string;
 
   @IsString()
   @IsOptional()

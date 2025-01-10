@@ -11,16 +11,28 @@ export class Sales {
   _id: string;
 
   @Prop({ type: String, required: false })
+  productImg?: string;
+
+  @Prop({ type: String, required: false })
   productName?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Product', required: true })
   product_id: Product;
 
   @Prop({ type: String, required: false })
+  userImg?: string;
+
+  @Prop({ type: String, required: false })
   userName?: string;
+
+  @Prop({ type: String, required: false })
+  userRole?: string;
 
   @Prop({ type: mongoose.Types.UUID, ref: 'User', required: true })
   user_id: User;
+
+  @Prop({ type: String, required: false })
+  storeImg?: string;
 
   @Prop({ type: String, required: false })
   storeName?: string;

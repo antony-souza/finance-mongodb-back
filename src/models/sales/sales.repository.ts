@@ -221,48 +221,6 @@ export class SalesRepository {
         },
       },
       {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'usersData',
-        },
-      },
-      {
-        $lookup: {
-          from: 'stores',
-          localField: 'store_id',
-          foreignField: '_id',
-          as: 'storesData',
-        },
-      },
-      {
-        $lookup: {
-          from: 'products',
-          localField: 'product_id',
-          foreignField: '_id',
-          as: 'productsData',
-        },
-      },
-      {
-        $unwind: {
-          path: '$storesData',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $unwind: {
-          path: '$usersData',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $unwind: {
-          path: '$productsData',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
         $sort: {
           createdAt: -1,
         },
@@ -272,8 +230,8 @@ export class SalesRepository {
           _id: 0,
           id: '$_id',
           productId: '$product_id',
-          productName: '$productsData.name',
-          productImg: '$productsData.image_url',
+          productName: '$productName',
+          productImg: '$productImg',
           quantitySold: '$quantitySold',
           date: {
             $dateToString: {
@@ -289,10 +247,10 @@ export class SalesRepository {
             },
           },
           totalBilled: '$totalBilled',
-          userName: '$usersData.name',
-          userRole: '$usersData.roleName',
-          userImg: '$usersData.image_url',
-          storeName: '$storesData.name',
+          userName: '$userName',
+          userRole: '$userRole',
+          userImg: '$userImg',
+          storeName: '$storeName',
         },
       },
     ]);
@@ -355,31 +313,8 @@ export class SalesRepository {
         },
       },
       {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'usersData',
-        },
-      },
-      {
-        $unwind: {
-          path: '$usersData',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $lookup: {
-          from: 'products',
-          localField: 'product_id',
-          foreignField: '_id',
-          as: 'productsData',
-        },
-      },
-      {
-        $unwind: {
-          path: '$productsData',
-          preserveNullAndEmptyArrays: true,
+        $sort: {
+          createdAt: -1,
         },
       },
       {
@@ -387,7 +322,7 @@ export class SalesRepository {
           _id: 0,
           productId: '$product_id',
           productName: '$productName',
-          productImg: '$productsData.image_url',
+          productImg: '$productImg',
           quantitySold: '$quantitySold',
           date: {
             $dateToString: {
@@ -405,7 +340,7 @@ export class SalesRepository {
           totalBilled: '$totalBilled',
           userName: '$userName',
           userRole: '$userRole',
-          userImg: '$usersData.image_url',
+          userImg: '$userImg',
           storeName: '$storeName',
         },
       },
