@@ -32,4 +32,7 @@ export class CreateUserDto {
 
   @IsOptional()
   role: Role;
+
+  @IsOptional()
+  storeId?: string;
 }

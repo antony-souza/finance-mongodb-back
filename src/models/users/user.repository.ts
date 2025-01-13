@@ -100,20 +100,6 @@ export class UserRepository {
         },
       },
       {
-        $lookup: {
-          from: 'stores',
-          localField: 'store',
-          foreignField: '_id',
-          as: 'storeData',
-        },
-      },
-      {
-        $unwind: {
-          path: '$storeData',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
         $project: {
           _id: 0,
           id: '$_id',
@@ -121,9 +107,34 @@ export class UserRepository {
           image_url: 1,
           email: 1,
           role: '$roleName',
-          store: '$storeData.name',
+          store: '$storeName',
         },
       },
     ]);
+  }
+
+  async searchUserFromStoreByName(store: string, name: string) {
+    console.log(store, name);
+    const user = await this.userModel.aggregate([
+      {
+        $match: {
+          store: store,
+          name: { $regex: name, $options: 'i' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: '$name',
+          image_url: '$image_url',
+          email: '$email',
+          role: '$roleName',
+          store: '$storeName',
+        },
+      },
+    ]);
+    console.log(user);
+    return user;
   }
 }

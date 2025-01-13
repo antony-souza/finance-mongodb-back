@@ -42,6 +42,13 @@ export class UsersService {
     return this.userRepository.getAllUsersByStore(storeId);
   }
 
+  async searchUserFromStoreByName(searchUserDto: UpdateUserDto) {
+    return await this.userRepository.searchUserFromStoreByName(
+      searchUserDto.storeId,
+      searchUserDto.name,
+    );
+  }
+
   async findOne(id: string) {
     return await this.userRepository.getUserById(id);
   }

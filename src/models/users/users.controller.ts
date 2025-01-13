@@ -13,6 +13,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from './dto/update-user.dto';
+
 @Controller('/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -30,6 +31,17 @@ export class UsersController {
   @Get('/store/:store_id')
   getAllUsersByStore(@Param('store_id') store_id: string) {
     return this.usersService.findAllUsersByStore(store_id);
+  }
+
+  @Get('/search/:store/:name')
+  searchUsersFromStoreByName(
+    @Param('store') store: string,
+    @Param('name') name: string,
+  ) {
+    return this.usersService.searchUserFromStoreByName({
+      storeId: store,
+      name: name,
+    });
   }
 
   @Post('/create')
