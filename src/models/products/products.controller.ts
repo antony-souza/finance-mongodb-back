@@ -38,6 +38,14 @@ export class ProductsController {
     return this.productsService.findAllByStore(storeId);
   }
 
+  @Get('/search/:store/:name')
+  findAllProductsByName(
+    @Param('store') store: string,
+    @Param('name') name: string,
+  ) {
+    return this.productsService.searchAllProductsFromStoreByName(store, name);
+  }
+
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);

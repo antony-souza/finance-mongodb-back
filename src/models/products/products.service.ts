@@ -30,6 +30,13 @@ export class ProductsService {
     return await this.productRepository.findAllByStore(storeId);
   }
 
+  async searchAllProductsFromStoreByName(storeId: string, name: string) {
+    return await this.productRepository.searchAllProductsFromStoreByName(
+      storeId,
+      name,
+    );
+  }
+
   async findOne(id: string) {
     return await this.productRepository.findOneProduct(id);
   }
