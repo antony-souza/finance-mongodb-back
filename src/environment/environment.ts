@@ -10,12 +10,9 @@ class Environment {
   public readonly host: string = process.env.HOST ?? '';
   public readonly secreatKey: string = process.env.SECREAT ?? '';
   public readonly databaseUrl: string = process.env.DATABASE_URL ?? '';
-  public readonly redisCacheHost: string = process.env.REDIS_CACHE_HOST ?? '';
-  public readonly redisCachePort: number = parseInt(
-    process.env.REDIS_CACHE_PORT ?? '',
-  );
-  public readonly redisCachePassword: string =
-    process.env.REDIS_CACHE_PASSWORD ?? '';
+  public readonly redisHost: string = process.env.REDIS_HOST ?? '';
+  public readonly redisPort: number = parseInt(process.env.REDIS_PORT ?? '');
+  public readonly redisPassword: string = process.env.REDIS_PASSWORD ?? '';
 }
 
 export const environment = new Environment();
