@@ -15,6 +15,13 @@ export class CategoriesService {
     return await this.categoriesRepository.getCategoriesByStore(id);
   }
 
+  async searchCategoriesFromStoreByName(updateCategoryDto: UpdateCategoryDto) {
+    return await this.categoriesRepository.searchAllCategoriesFromStoreByName(
+      updateCategoryDto.storeId,
+      updateCategoryDto.name,
+    );
+  }
+
   async createCategory(createCategoryDto: CreateCategoryDto) {
     let url = '';
 

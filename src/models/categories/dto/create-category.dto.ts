@@ -14,4 +14,7 @@ export class CreateCategoryDto {
 
   @IsString()
   store: Store;
+
+  @IsOptional()
+  storeId: string;
 }

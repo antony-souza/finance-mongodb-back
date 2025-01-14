@@ -256,47 +256,6 @@ export class SalesRepository {
     ]);
   }
 
-  async getTopSellingProductsByDate(
-    storeId: string,
-    startDate: Date,
-    endDate: Date,
-  ) {
-    return await this.salesModel.aggregate([
-      {
-        $match: {
-          store_id: `${storeId}`,
-          createdAt: {
-            $gte: `${startDate}`,
-            $lte: `${endDate}`,
-          },
-        },
-      },
-      {
-        $group: {
-          _id: '$product_id',
-          quantitySold: {
-            $sum: '$quantitySold',
-          },
-          totalBilled: {
-            $sum: '$totalBilled',
-          },
-          productName: {
-            $first: '$productName',
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          productId: '$_id',
-          productName: '$productName',
-          quantitySold: '$quantitySold',
-          totalBilled: '$totalBilled',
-        },
-      },
-    ]);
-  }
-
   async getSalesByDate(
     storeId: string,
     startDate: string,

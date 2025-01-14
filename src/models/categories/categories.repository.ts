@@ -82,4 +82,38 @@ export class CategoriesRepository {
     }
     return;
   }
+
+  async searchAllCategoriesFromStoreByName(storeId: string, name: string) {
+    return await this.categoriesModel.aggregate([
+      {
+        $match: {
+          store: storeId,
+          name: { $regex: name, $options: 'i' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'stores',
+          localField: 'store',
+          foreignField: '_id',
+          as: 'storeData',
+        },
+      },
+      {
+        $unwind: {
+          path: '$storeData',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          name: '$name',
+          image_url: '$image_url',
+          storeName: '$storeData.name',
+        },
+      },
+    ]);
+  }
 }

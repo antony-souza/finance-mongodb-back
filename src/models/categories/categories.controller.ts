@@ -23,6 +23,17 @@ export class CategoriesController {
     return this.categoriesService.findAllCategoriesByStore(id);
   }
 
+  @Get('/search/:storeId/:name')
+  searchCategoriesFromStoreByName(
+    @Param('storeId') storeId: string,
+    @Param('name') name: string,
+  ) {
+    return this.categoriesService.searchCategoriesFromStoreByName({
+      storeId: storeId,
+      name: name,
+    });
+  }
+
   @Post('/create')
   @UseInterceptors(FileInterceptor('image_url'))
   createCategory(

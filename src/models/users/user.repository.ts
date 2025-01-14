@@ -114,8 +114,7 @@ export class UserRepository {
   }
 
   async searchUserFromStoreByName(store: string, name: string) {
-    console.log(store, name);
-    const user = await this.userModel.aggregate([
+    return await this.userModel.aggregate([
       {
         $match: {
           store: store,
@@ -134,7 +133,5 @@ export class UserRepository {
         },
       },
     ]);
-    console.log(user);
-    return user;
   }
 }
