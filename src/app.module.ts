@@ -15,6 +15,7 @@ import { PermissionsModule } from './models/permissions/permissions.module';
 import { WebSocketGatewayModule } from './websocket/websocket.module';
 import { SocketGateway } from './websocket/websocket.gateway';
 import { SheetsModule } from './models/sheets/sheets.module';
+import { NodemailerModule } from './models/nodemailer/nodemailer.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { SheetsModule } from './models/sheets/sheets.module';
     PermissionsModule,
     SheetsModule,
     WebSocketGatewayModule,
+    NodemailerModule,
   ],
   controllers: [AppController],
   providers: [AppService, SocketGateway],

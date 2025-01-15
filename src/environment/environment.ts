@@ -13,6 +13,11 @@ class Environment {
   public readonly redisHost: string = process.env.REDIS_HOST ?? '';
   public readonly redisPort: number = parseInt(process.env.REDIS_PORT ?? '');
   public readonly redisPassword: string = process.env.REDIS_PASSWORD ?? '';
+  public readonly smtpHost: string = process.env.SMTP_HOST ?? '';
+  public readonly smtpPort: number = parseInt(process.env.SMTP_PORT ?? '');
+  public readonly sendEmailService: string = process.env.EMAIL_SERVICE ?? '';
+  public readonly sendPasswordService: string =
+    process.env.PASSWORD_SERVICE ?? '';
 }
 
 export const environment = new Environment();
