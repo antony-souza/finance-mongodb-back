@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { environment } from 'src/environment/environment';
 import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
+import { NodemailerRepository } from './nodemailer.repository';
 
 @Injectable()
 export class NodemailerService {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
+  constructor(private readonly nodeMailerRepository: NodemailerRepository) {
     this.transporter = nodemailer.createTransport({
       host: environment.smtpHost,
       port: environment.smtpPort,
@@ -27,6 +28,16 @@ export class NodemailerService {
   }
 
   async sendCodeRecoveryByEmail(dto: UpdateNodemailerDto): Promise<string> {
+    const checkUser = await this.nodeMailerRepository.findUserByEmail(
+      dto.email,
+    );
+
+    if (checkUser === 0) {
+      throw new NotFoundException(
+        'Usuário não encontrado em nossa base de dados',
+      );
+    }
+
     const code = await this.randomCode();
     const htmlContent = `
       <!DOCTYPE html>
