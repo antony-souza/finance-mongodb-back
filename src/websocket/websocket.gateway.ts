@@ -32,7 +32,7 @@ export class SocketGateway {
   }
 
   @SubscribeMessage('sales')
-  async sendSalesProducts(store_id: string, data: any) {
+  async sendBillingsByStore(store_id: string, data: any) {
     await this.server.to(store_id).emit('sales', data);
   }
 }

@@ -3,6 +3,7 @@ import { CreateSaleDto } from './dto/create-sale.dto';
 import { SalesRepository } from 'src/models/sales/sales.repository';
 import { formatPrice } from 'src/utils/formatPrice/formatPricer';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { SocketGateway } from 'src/websocket/websocket.gateway';
 
 export interface IBillingsStore {
   id: string;
@@ -14,7 +15,10 @@ export interface IBillingsStore {
 
 @Injectable()
 export class SalesService {
-  constructor(private readonly salesRepository: SalesRepository) {}
+  constructor(
+    private readonly salesRepository: SalesRepository,
+    private readonly webSocketService: SocketGateway,
+  ) {}
 
   async create(createSaleDto: CreateSaleDto) {
     const checkProductUserStore =
@@ -42,6 +46,15 @@ export class SalesService {
       userRole: checkProductUserStore.checkUser.roleName,
       totalBilled: totalBilled,
     });
+
+    const billings = await this.salesRepository.getBillingsByStore(
+      createSaleDto.store_id,
+    );
+
+    await this.webSocketService.sendBillingsByStore(
+      createSaleDto.store_id,
+      billings,
+    );
 
     return createSales;
   }

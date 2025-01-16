@@ -11,6 +11,7 @@ import { ProductRepository } from 'src/models/products/product.repository';
 import { TokenGuards } from 'src/guards/token.guards';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthService } from 'src/middleware/jwt.service';
+import { SocketGateway } from 'src/websocket/websocket.gateway';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { JwtAuthService } from 'src/middleware/jwt.service';
     TokenGuards,
     JwtService,
     JwtAuthService,
+    SocketGateway,
   ],
 })
 export class SalesModule {}

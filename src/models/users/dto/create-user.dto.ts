@@ -35,4 +35,7 @@ export class CreateUserDto {
 
   @IsOptional()
   storeId?: string;
+
+  @IsOptional()
+  recoveryCode?: number;
 }

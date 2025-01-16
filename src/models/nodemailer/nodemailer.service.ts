@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { environment } from 'src/environment/environment';
 import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
@@ -23,11 +27,11 @@ export class NodemailerService {
     });
   }
 
-  async randomCode(): Promise<string> {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+  async randomCode(): Promise<number> {
+    return Math.floor(100000 + Math.random() * 900000);
   }
 
-  async sendCodeRecoveryByEmail(dto: UpdateNodemailerDto): Promise<string> {
+  async sendCodeRecoveryByEmail(dto: UpdateNodemailerDto) {
     const checkUser = await this.nodeMailerRepository.findUserByEmail(
       dto.email,
     );
@@ -38,7 +42,18 @@ export class NodemailerService {
       );
     }
 
-    const code = await this.randomCode();
+    const recoveryCode = await this.randomCode();
+
+    const updateRecoveryCode =
+      await this.nodeMailerRepository.updateRecoveryCode(
+        dto.email,
+        recoveryCode,
+      );
+
+    if (!updateRecoveryCode) {
+      throw new ConflictException('Falha ao atualizar código de recuperação!');
+    }
+
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="pt-br">
@@ -98,7 +113,7 @@ export class NodemailerService {
           </div>
           <div class="content">
             <p>Recebemos uma solicitação para redefinir sua senha. Use o código abaixo para redefini-la:</p>
-            <div class="code">${code}</div>
+            <div class="code">${recoveryCode}</div>
             <p>Se você não solicitou isso, pode ignorar este e-mail.</p>
           </div>
           <div class="footer">
@@ -109,13 +124,19 @@ export class NodemailerService {
       </html>
     `;
 
-    await this.transporter.sendMail({
-      from: environment.sendEmailService,
-      to: dto.email,
-      subject: 'Redefinição de Senha 🔒',
-      html: htmlContent,
-    });
+    const checkRecoveryCode = this.nodeMailerRepository.findUserByRecoveryCode(
+      dto.recoveryCode,
+    );
 
-    return `Código de recuperação enviado para ${dto.email}`;
+    if (checkRecoveryCode) {
+      return await this.transporter.sendMail({
+        from: environment.sendEmailService,
+        to: dto.email,
+        subject: 'Redefinição de Senha 🔒',
+        html: htmlContent,
+      });
+    }
+
+    return { message: 'Código enviado com sucesso!' };
   }
 }

@@ -14,4 +14,21 @@ export class NodemailerRepository {
       email: email,
     });
   }
+
+  async updateRecoveryCode(email: string, recoveryCode: number) {
+    return await this.userModel.findByIdAndUpdate(
+      {
+        email: email,
+      },
+      {
+        recoveryCode: recoveryCode,
+      },
+    );
+  }
+
+  async findUserByRecoveryCode(recoveryCode: number): Promise<number> {
+    return await this.userModel.countDocuments({
+      recoveryCode: recoveryCode,
+    });
+  }
 }

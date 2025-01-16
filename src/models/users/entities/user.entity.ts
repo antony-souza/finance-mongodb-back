@@ -37,6 +37,9 @@ export class User {
 
   @Prop({ type: mongoose.Types.UUID, ref: 'Role', required: true })
   role: Role;
+
+  @Prop({ type: Number, required: false })
+  recoveryCode?: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
