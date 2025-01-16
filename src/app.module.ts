@@ -15,7 +15,7 @@ import { PermissionsModule } from './models/permissions/permissions.module';
 import { WebSocketGatewayModule } from './websocket/websocket.module';
 import { SocketGateway } from './websocket/websocket.gateway';
 import { SheetsModule } from './models/sheets/sheets.module';
-import { NodemailerModule } from './models/nodemailer/nodemailer.module';
+import { RecoveryModule } from './models/recovery/recovery.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { NodemailerModule } from './models/nodemailer/nodemailer.module';
     PermissionsModule,
     SheetsModule,
     WebSocketGatewayModule,
-    NodemailerModule,
+    RecoveryModule,
   ],
   controllers: [AppController],
   providers: [AppService, SocketGateway],

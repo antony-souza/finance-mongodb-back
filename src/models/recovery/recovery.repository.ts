@@ -4,7 +4,7 @@ import { User } from '../users/entities/user.entity';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class NodemailerRepository {
+export class RecoveryRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}

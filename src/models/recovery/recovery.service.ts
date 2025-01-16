@@ -6,13 +6,13 @@ import {
 import * as nodemailer from 'nodemailer';
 import { environment } from 'src/environment/environment';
 import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
-import { NodemailerRepository } from './nodemailer.repository';
+import { RecoveryRepository } from './recovery.repository';
 
 @Injectable()
-export class NodemailerService {
+export class RecoveryService {
   private transporter: nodemailer.Transporter;
 
-  constructor(private readonly nodeMailerRepository: NodemailerRepository) {
+  constructor(private readonly recoveryRepository: RecoveryRepository) {
     this.transporter = nodemailer.createTransport({
       host: environment.smtpHost,
       port: environment.smtpPort,
@@ -32,9 +32,7 @@ export class NodemailerService {
   }
 
   async sendCodeRecoveryByEmail(dto: UpdateNodemailerDto) {
-    const checkUser = await this.nodeMailerRepository.findUserByEmail(
-      dto.email,
-    );
+    const checkUser = await this.recoveryRepository.findUserByEmail(dto.email);
 
     if (checkUser === 0) {
       throw new NotFoundException(
@@ -44,11 +42,10 @@ export class NodemailerService {
 
     const recoveryCode = await this.randomCode();
 
-    const updateRecoveryCode =
-      await this.nodeMailerRepository.updateRecoveryCode(
-        dto.email,
-        recoveryCode,
-      );
+    const updateRecoveryCode = await this.recoveryRepository.updateRecoveryCode(
+      dto.email,
+      recoveryCode,
+    );
 
     if (!updateRecoveryCode) {
       throw new ConflictException('Falha ao atualizar código de recuperação!');
@@ -124,7 +121,7 @@ export class NodemailerService {
       </html>
     `;
 
-    const checkRecoveryCode = this.nodeMailerRepository.findUserByRecoveryCode(
+    const checkRecoveryCode = this.recoveryRepository.findUserByRecoveryCode(
       dto.recoveryCode,
     );
 

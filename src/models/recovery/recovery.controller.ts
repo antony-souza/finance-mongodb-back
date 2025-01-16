@@ -1,11 +1,11 @@
 import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
-import { NodemailerService } from './nodemailer.service';
+import { RecoveryService } from './recovery.service';
 import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('/recovery')
-export class NodemailerController {
-  constructor(private readonly nodemailerService: NodemailerService) {}
+export class RecoveryController {
+  constructor(private readonly nodemailerService: RecoveryService) {}
 
   @Post('/send-code-recovery-by-email')
   @UseInterceptors(FileInterceptor(''))
