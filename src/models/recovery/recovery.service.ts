@@ -1,12 +1,8 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { environment } from 'src/environment/environment';
-import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
 import { RecoveryRepository } from './recovery.repository';
+import { CreateRecoveryDto } from './dto/create-recovery.dto';
 
 @Injectable()
 export class RecoveryService {
@@ -31,25 +27,16 @@ export class RecoveryService {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  async sendCodeRecoveryByEmail(dto: UpdateNodemailerDto) {
+  async sendCodeRecoveryByEmail(dto: CreateRecoveryDto) {
     const checkUser = await this.recoveryRepository.findUserByEmail(dto.email);
 
-    if (checkUser === 0) {
+    if (!checkUser) {
       throw new NotFoundException(
         'Usuário não encontrado em nossa base de dados',
       );
     }
 
     const recoveryCode = await this.randomCode();
-
-    const updateRecoveryCode = await this.recoveryRepository.updateRecoveryCode(
-      dto.email,
-      recoveryCode,
-    );
-
-    if (!updateRecoveryCode) {
-      throw new ConflictException('Falha ao atualizar código de recuperação!');
-    }
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -121,19 +108,11 @@ export class RecoveryService {
       </html>
     `;
 
-    const checkRecoveryCode = this.recoveryRepository.findUserByRecoveryCode(
-      dto.recoveryCode,
-    );
-
-    if (checkRecoveryCode) {
-      return await this.transporter.sendMail({
-        from: environment.sendEmailService,
-        to: dto.email,
-        subject: 'Redefinição de Senha 🔒',
-        html: htmlContent,
-      });
-    }
-
-    return { message: 'Código enviado com sucesso!' };
+    return await this.transporter.sendMail({
+      from: environment.sendEmailService,
+      to: dto.email,
+      subject: 'Redefinição de Senha 🔒',
+      html: htmlContent,
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { RecoveryService } from './recovery.service';
-import { UpdateNodemailerDto } from './dto/update-nodemailer.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateRecoveryDto } from './dto/create-recovery.dto';
 
 @Controller('/recovery')
 export class RecoveryController {
@@ -9,7 +9,7 @@ export class RecoveryController {
 
   @Post('/send-code-recovery-by-email')
   @UseInterceptors(FileInterceptor(''))
-  async sendCodeRecoveryByEmail(@Body() dto: UpdateNodemailerDto) {
+  async sendCodeRecoveryByEmail(@Body() dto: CreateRecoveryDto) {
     return await this.nodemailerService.sendCodeRecoveryByEmail(dto);
   }
 }
