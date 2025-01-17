@@ -7,8 +7,8 @@ export class Recovery {
   @Prop({ type: String, default: uuidv4, required: false })
   _id?: string;
 
-  @Prop({ type: Number, required: true })
-  recoveryCode: number;
+  @Prop({ type: String, required: true })
+  recoveryCode: string;
 
   @Prop({ type: Date, required: true })
   codeExpires: Date;

@@ -32,11 +32,13 @@ export class RecoveryService {
     });
   }
 
-  async randomCode(): Promise<number> {
-    return Math.floor(100000 + Math.random() * 900000);
+  async randomCode(): Promise<string> {
+    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  async sendCodeRecoveryByEmail(dto: CreateRecoveryDto) {
+  async sendCodeRecoveryByEmail(
+    dto: CreateRecoveryDto,
+  ): Promise<{ message: string }> {
     const checkUser = await this.recoveryRepository.findUserByEmail(dto.email);
 
     if (!checkUser) {
@@ -128,12 +130,16 @@ export class RecoveryService {
       </html>
     `;
 
-    return await this.transporter.sendMail({
+    await this.transporter.sendMail({
       from: environment.sendEmailService,
       to: dto.email,
       subject: 'Redefinição de Senha 🔒',
       html: htmlContent,
     });
+
+    return {
+      message: 'Código de recuperação enviado com sucesso',
+    };
   }
 
   async validadeRecoveryCode(dto: UpdateRecoveryDto) {
@@ -149,11 +155,12 @@ export class RecoveryService {
 
     return {
       message: 'Código de recuperação válido',
-      recoveryCode: recovery,
     };
   }
 
-  async updatePasswordForRecovery(dto: UpdateRecoveryDto): Promise<string> {
+  async updatePasswordForRecovery(
+    dto: UpdateRecoveryDto,
+  ): Promise<{ message: string }> {
     const recovery = await this.recoveryRepository.validateRecoveryCode(
       dto.recoveryCode,
     );
@@ -185,6 +192,8 @@ export class RecoveryService {
       throw new ConflictException('Erro ao desativar código de recuperação');
     }
 
-    return 'Senha atualizada com sucesso';
+    return {
+      message: 'Senha atualizada com sucesso',
+    };
   }
 }

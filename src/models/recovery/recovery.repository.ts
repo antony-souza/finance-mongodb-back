@@ -23,7 +23,7 @@ export class RecoveryRepository {
 
   async saveRecoveryCode(
     user: string,
-    recoveryCode: number,
+    recoveryCode: string,
   ): Promise<Recovery> {
     const codeExpires = new Date().setMinutes(new Date().getMinutes() + 10);
 
@@ -40,7 +40,7 @@ export class RecoveryRepository {
     });
   }
 
-  async validateRecoveryCode(recoveryCode: number): Promise<Recovery> {
+  async validateRecoveryCode(recoveryCode: string): Promise<Recovery> {
     const recovery = await this.recoveryModel.findOne({
       recoveryCode: recoveryCode,
       codeExpires: { $gt: new Date() },

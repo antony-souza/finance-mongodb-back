@@ -9,7 +9,7 @@ export class CreateRecoveryDto {
   email: string;
 
   @IsOptional()
-  recoveryCode?: number;
+  recoveryCode?: string;
 
   @IsOptional()
   codeExpires?: Date;
