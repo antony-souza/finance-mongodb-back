@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../users/entities/user.entity';
 import { RecoveryRepository } from './recovery.repository';
 import { Recovery, RecoverySchema } from './entities/recovery.entity';
+import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { Recovery, RecoverySchema } from './entities/recovery.entity';
     ]),
   ],
   controllers: [RecoveryController],
-  providers: [RecoveryService, RecoveryRepository],
+  providers: [RecoveryService, RecoveryRepository, GeneratePasswordService],
 })
 export class RecoveryModule {}

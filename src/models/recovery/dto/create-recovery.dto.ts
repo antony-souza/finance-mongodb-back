@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateRecoveryDto {
   @IsString()
@@ -16,6 +16,10 @@ export class CreateRecoveryDto {
 
   @IsOptional()
   user?: string;
+
+  @IsOptional()
+  @MinLength(6)
+  password?: string;
 
   @IsOptional()
   enabled?: boolean;

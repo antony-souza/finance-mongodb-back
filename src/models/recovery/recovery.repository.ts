@@ -17,11 +17,15 @@ export class RecoveryRepository {
     });
   }
 
+  async findUserById(id: string): Promise<User> {
+    return await this.userModel.findById(id);
+  }
+
   async saveRecoveryCode(
-    recoveryCode: number,
     user: string,
+    recoveryCode: number,
   ): Promise<Recovery> {
-    const codeExpires = new Date().setMinutes(new Date().getMinutes() + 5);
+    const codeExpires = new Date().setMinutes(new Date().getMinutes() + 10);
 
     return await this.recoveryModel.create({
       recoveryCode: recoveryCode,
@@ -30,10 +34,25 @@ export class RecoveryRepository {
     });
   }
 
-  async findRecoveryCode(recoveryCode: number): Promise<number> {
-    return await this.recoveryModel.countDocuments({
+  async disableRecoveryCode(id: string) {
+    return await this.recoveryModel.findByIdAndUpdate(id, {
+      enabled: false,
+    });
+  }
+
+  async validateRecoveryCode(recoveryCode: number): Promise<Recovery> {
+    const recovery = await this.recoveryModel.findOne({
       recoveryCode: recoveryCode,
       codeExpires: { $gt: new Date() },
+      enabled: true,
+    });
+
+    return recovery;
+  }
+
+  async updatePasswordForRecovery(data: Partial<User>) {
+    return this.userModel.findByIdAndUpdate(data._id, {
+      password: data.password,
     });
   }
 }

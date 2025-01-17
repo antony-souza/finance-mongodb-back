@@ -1,14 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { environment } from 'src/environment/environment';
 import { RecoveryRepository } from './recovery.repository';
 import { CreateRecoveryDto } from './dto/create-recovery.dto';
+import { UpdateRecoveryDto } from './dto/update-recovery.dto';
+import GeneratePasswordService from 'src/utils/hashPassword/hash-pass.service';
 
 @Injectable()
 export class RecoveryService {
   private transporter: nodemailer.Transporter;
 
-  constructor(private readonly recoveryRepository: RecoveryRepository) {
+  constructor(
+    private readonly recoveryRepository: RecoveryRepository,
+    private readonly generatePasswordService: GeneratePasswordService,
+  ) {
     this.transporter = nodemailer.createTransport({
       host: environment.smtpHost,
       port: environment.smtpPort,
@@ -37,6 +46,16 @@ export class RecoveryService {
     }
 
     const recoveryCode = await this.randomCode();
+
+    const saveRecoveryCodeFromDB =
+      await this.recoveryRepository.saveRecoveryCode(
+        checkUser._id,
+        recoveryCode,
+      );
+
+    if (!saveRecoveryCodeFromDB) {
+      throw new ConflictException('Erro ao salvar código de recuperação');
+    }
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -98,6 +117,7 @@ export class RecoveryService {
           <div class="content">
             <p>Recebemos uma solicitação para redefinir sua senha. Use o código abaixo para redefini-la:</p>
             <div class="code">${recoveryCode}</div>
+            <p>O código é válido durante 10 minutos.</p>
             <p>Se você não solicitou isso, pode ignorar este e-mail.</p>
           </div>
           <div class="footer">
@@ -114,5 +134,57 @@ export class RecoveryService {
       subject: 'Redefinição de Senha 🔒',
       html: htmlContent,
     });
+  }
+
+  async validadeRecoveryCode(dto: UpdateRecoveryDto) {
+    const recovery = await this.recoveryRepository.validateRecoveryCode(
+      dto.recoveryCode,
+    );
+
+    if (!recovery) {
+      throw new NotFoundException(
+        'Código de recuperação inválido ou expirado.',
+      );
+    }
+
+    return {
+      message: 'Código de recuperação válido',
+      recoveryCode: recovery,
+    };
+  }
+
+  async updatePasswordForRecovery(dto: UpdateRecoveryDto): Promise<string> {
+    const recovery = await this.recoveryRepository.validateRecoveryCode(
+      dto.recoveryCode,
+    );
+
+    if (!recovery) {
+      throw new NotFoundException(
+        'Código de recuperação inválido ou expirado.',
+      );
+    }
+
+    const newPassword = await this.generatePasswordService.createHash(
+      dto.password,
+    );
+
+    const updatePassword =
+      await this.recoveryRepository.updatePasswordForRecovery({
+        _id: recovery.user,
+        password: newPassword,
+      });
+
+    if (!updatePassword) {
+      throw new ConflictException('Erro ao atualizar senha');
+    }
+
+    const disableRecoveryCode =
+      await this.recoveryRepository.disableRecoveryCode(recovery._id);
+
+    if (!disableRecoveryCode) {
+      throw new ConflictException('Erro ao desativar código de recuperação');
+    }
+
+    return 'Senha atualizada com sucesso';
   }
 }
