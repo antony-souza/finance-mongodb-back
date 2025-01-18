@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateSaleDto {
   @IsOptional()
@@ -55,4 +55,14 @@ export class CreateSaleDto {
 
   @IsOptional()
   endDate?: string;
+
+  @IsString()
+  clientName: string;
+
+  @IsBoolean()
+  isDelivery: boolean;
+
+  @IsString()
+  @IsOptional()
+  deliveryAddress?: string;
 }

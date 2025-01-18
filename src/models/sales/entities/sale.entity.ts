@@ -45,6 +45,15 @@ export class Sales {
 
   @Prop({ type: Number, required: true })
   quantitySold: number;
+
+  @Prop({ type: String, required: true })
+  clientName: string;
+
+  @Prop({ type: Boolean, required: true })
+  isDelivery: boolean;
+
+  @Prop({ type: String, required: false })
+  deliveryAddress?: string;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(Sales);
