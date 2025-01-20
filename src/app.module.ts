@@ -16,6 +16,8 @@ import { WebSocketGatewayModule } from './websocket/websocket.module';
 import { SocketGateway } from './websocket/websocket.gateway';
 import { SheetsModule } from './models/sheets/sheets.module';
 import { RecoveryModule } from './models/recovery/recovery.module';
+import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
+import { RabbitmqService } from './rabbitmq/rabbitmq.service';
 
 @Module({
   imports: [
@@ -34,8 +36,9 @@ import { RecoveryModule } from './models/recovery/recovery.module';
     SheetsModule,
     WebSocketGatewayModule,
     RecoveryModule,
+    RabbitmqModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SocketGateway],
+  providers: [AppService, SocketGateway, RabbitmqService],
 })
 export class AppModule {}
