@@ -352,33 +352,40 @@ export class SalesRepository {
     ]);
   }
 
-  getAllDeliverySales(storeId: string) {
-    return this.salesModel.aggregate([
-      {
-        $match: {
-          store_id: storeId,
-          isDelivery: true,
+  async getAllDeliverySales(storeId: string) {
+    return await this.salesModel
+      .aggregate([
+        {
+          $match: {
+            store_id: storeId,
+            isDelivery: true,
+          },
         },
-        $sort: {
-          deliveryDate: 1,
+        {
+          $sort: {
+            deliveryDate: 1,
+          },
         },
-        $project: {
-          _id: 0,
-          id: '$_id',
-          productId: '$product_id',
-          productName: '$productName',
-          productImg: '$productImg',
-          quantitySold: '$quantitySold',
-          totalBilled: '$totalBilled',
-          deliveryAddress: '$deliveryAddress',
-          deliveryDate: {
-            $dateToString: {
-              format: '%d/%m/%Y',
-              date: '$deliveryDate',
+        {
+          $project: {
+            _id: 0,
+            id: '$_id',
+            productId: '$product_id',
+            productName: '$productName',
+            productImg: '$productImg',
+            quantitySold: '$quantitySold',
+            totalBilled: '$totalBilled',
+            clientName: '$clientName',
+            deliveryAddress: '$deliveryAddress',
+            deliveryDate: {
+              $dateToString: {
+                format: '%d/%m/%Y',
+                date: '$deliveryDate',
+              },
             },
           },
         },
-      },
-    ]);
+      ])
+      .exec();
   }
 }

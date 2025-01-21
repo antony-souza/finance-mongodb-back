@@ -101,4 +101,8 @@ export class SalesService {
       totalBilled: formatPrice(sale.totalBilled),
     }));
   }
+
+  async getDeliverySales(dto: UpdateSaleDto) {
+    return await this.salesRepository.getAllDeliverySales(dto.store_id);
+  }
 }

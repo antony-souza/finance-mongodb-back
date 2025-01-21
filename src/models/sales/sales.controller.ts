@@ -85,4 +85,14 @@ export class SalesController {
   findAllSalesByUser(@Param('store_id') store_id: string) {
     return this.salesService.getSalesByUser(store_id);
   }
+
+  @AllowedRoles(
+    RolesEnum.Desenvolvedor,
+    RolesEnum.Gerente,
+    RolesEnum.Subgerente,
+  )
+  @Get('/delivery/:store_id')
+  findAllDeliverySales(@Param('store_id') store_id: string) {
+    return this.salesService.getDeliverySales({ store_id: store_id });
+  }
 }
