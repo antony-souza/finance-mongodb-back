@@ -126,4 +126,6 @@ export class RecoveryService {
       message: 'Senha atualizada com sucesso',
     };
   }
+
+  sendMail;
 }

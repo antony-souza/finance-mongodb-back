@@ -54,6 +54,9 @@ export class Sales {
 
   @Prop({ type: String, required: false })
   deliveryAddress?: string;
+
+  @Prop({ type: Date, required: false })
+  deliveryDate?: Date;
 }
 
 export const SalesSchema = SchemaFactory.createForClass(Sales);

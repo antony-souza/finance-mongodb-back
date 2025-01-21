@@ -1,4 +1,4 @@
-export const htmlRecoveryPassword = (recoveryCode) => {
+export const htmlRecoveryPassword = (recoveryCode: string) => {
   return `
       <!DOCTYPE html>
       <html lang="pt-br">

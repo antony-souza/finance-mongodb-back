@@ -65,4 +65,7 @@ export class CreateSaleDto {
   @IsString()
   @IsOptional()
   deliveryAddress?: string;
+
+  @IsOptional()
+  deliveryDate?: Date;
 }
